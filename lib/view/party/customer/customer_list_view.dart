@@ -61,9 +61,10 @@ class _CustomerListViewState extends State<CustomerListView>
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
-            child: isMobile
-                ? _buildMobileLayout()
-                : _buildDesktopLayout(screenSize),
+            child:
+                isMobile
+                    ? _buildMobileLayout()
+                    : _buildDesktopLayout(screenSize),
           ),
         ],
       ),
@@ -159,32 +160,33 @@ class _CustomerListViewState extends State<CustomerListView>
               color: Colors.white,
               borderRadius: BorderRadius.circular(10),
             ),
-            child: selectedPartyIndex != null
-                ? Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Header with company name and action buttons
-                      _buildDetailHeader(),
-                      TabBar(
-                        onTap: (value) {
-                          setState(() {
-                            crtTab = value;
-                          });
-                        },
-                        isScrollable: true,
-                        tabAlignment: TabAlignment.start,
-                        controller: controller,
-                        tabs: [Tab(text: "About"), Tab(text: "Transaction")],
+            child:
+                selectedPartyIndex != null
+                    ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Header with company name and action buttons
+                        _buildDetailHeader(),
+                        TabBar(
+                          onTap: (value) {
+                            setState(() {
+                              crtTab = value;
+                            });
+                          },
+                          isScrollable: true,
+                          tabAlignment: TabAlignment.start,
+                          controller: controller,
+                          tabs: [Tab(text: "About"), Tab(text: "Transaction")],
+                        ),
+                        Expanded(child: listPage[crtTab]),
+                      ],
+                    )
+                    : Center(
+                      child: Text(
+                        "Select a customer to view details",
+                        style: Theme.of(context).textTheme.titleMedium,
                       ),
-                      Expanded(child: listPage[crtTab]),
-                    ],
-                  )
-                : Center(
-                    child: Text(
-                      "Select a customer to view details",
-                      style: Theme.of(context).textTheme.titleMedium,
                     ),
-                  ),
           ),
         ),
       ],
@@ -267,7 +269,10 @@ class _CustomerListViewState extends State<CustomerListView>
                     children: [
                       // List header
                       Container(
-                        color: Theme.of(context).primaryColor.withOpacity(0.1),
+                        color: Theme.of(
+                          context,
+                        ).primaryColor.withAlpha((0.1 * 255).toInt()),
+
                         padding: EdgeInsets.symmetric(
                           horizontal: 16,
                           vertical: 12,
@@ -298,11 +303,13 @@ class _CustomerListViewState extends State<CustomerListView>
                               },
                               child: Container(
                                 padding: EdgeInsets.symmetric(vertical: 4),
-                                color: selectedPartyIndex == index
-                                    ? Theme.of(context).primaryColor.withOpacity(0.1)
-                                    : (index % 2 == 0
-                                        ? Colors.white
-                                        : Colors.grey.shade50),
+                                color:
+                                    selectedPartyIndex == index
+                                        ? Theme.of(context).primaryColor
+                                            .withAlpha((0.1 * 255).toInt())
+                                        : (index % 2 == 0
+                                            ? Colors.white
+                                            : Colors.grey.shade50),
                                 child: ListTile(
                                   leading: Container(
                                     width: 40,
@@ -388,7 +395,7 @@ class _CustomerListViewState extends State<CustomerListView>
       onTap: () {
         // Set the creation page for reference
         creationPageConfig.changePage(CustomerCreateView());
-        
+
         // Show customer creation form in a dialog
         showDialog(
           context: context,
@@ -424,7 +431,9 @@ class _CustomerListViewState extends State<CustomerListView>
               const SizedBox(width: 5),
               Text(
                 "Add New",
-                style: Theme.of(context).textTheme.labelMedium!.copyWith(color: Colors.white),
+                style: Theme.of(
+                  context,
+                ).textTheme.labelMedium!.copyWith(color: Colors.white),
               ),
             ],
           ],
@@ -457,7 +466,9 @@ class _CustomerListViewState extends State<CustomerListView>
             const SizedBox(width: 5),
             Text(
               label,
-              style: Theme.of(context).textTheme.labelMedium!.copyWith(color: Colors.white),
+              style: Theme.of(
+                context,
+              ).textTheme.labelMedium!.copyWith(color: Colors.white),
             ),
           ],
         ],

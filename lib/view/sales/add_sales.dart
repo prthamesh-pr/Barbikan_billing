@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class AddSales extends StatefulWidget {
-  const AddSales({Key? key}) : super(key: key);
+  const AddSales({super.key});
 
   @override
   State<AddSales> createState() => _AddSalesState();
@@ -10,15 +10,15 @@ class AddSales extends StatefulWidget {
 
 class _AddSalesState extends State<AddSales> {
   final _formKey = GlobalKey<FormState>();
-  
+
   // Form controllers
   final _customerController = TextEditingController();
   DateTime _selectedDate = DateTime.now();
   String _selectedStatus = 'Pending';
-  
+
   // Items in the sale
   final List<SaleItem> _items = [SaleItem()];
-  
+
   @override
   void dispose() {
     _customerController.dispose();
@@ -29,7 +29,7 @@ class _AddSalesState extends State<AddSales> {
     }
     super.dispose();
   }
-  
+
   double get _totalAmount {
     double total = 0.0;
     for (var item in _items) {
@@ -39,13 +39,13 @@ class _AddSalesState extends State<AddSales> {
     }
     return total;
   }
-  
+
   void _addItem() {
     setState(() {
       _items.add(SaleItem());
     });
   }
-  
+
   void _removeItem(int index) {
     if (_items.length > 1) {
       setState(() {
@@ -56,7 +56,7 @@ class _AddSalesState extends State<AddSales> {
       });
     }
   }
-  
+
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -68,21 +68,21 @@ class _AddSalesState extends State<AddSales> {
           data: ThemeData.light().copyWith(
             colorScheme: const ColorScheme.light(primary: Colors.indigo),
             buttonTheme: const ButtonThemeData(
-              textTheme: ButtonTextTheme.primary
+              textTheme: ButtonTextTheme.primary,
             ),
           ),
           child: child!,
         );
       },
     );
-    
+
     if (picked != null && picked != _selectedDate) {
       setState(() {
         _selectedDate = picked;
       });
     }
   }
-  
+
   void _saveSale() {
     if (_formKey.currentState!.validate()) {
       // Here you would save the sale to your database
@@ -91,7 +91,7 @@ class _AddSalesState extends State<AddSales> {
       print('Date: ${DateFormat('yyyy-MM-dd').format(_selectedDate)}');
       print('Status: $_selectedStatus');
       print('Total Amount: \$${_totalAmount.toStringAsFixed(2)}');
-      
+
       // Display success message
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -99,7 +99,7 @@ class _AddSalesState extends State<AddSales> {
           backgroundColor: Colors.green,
         ),
       );
-      
+
       // Navigate back to the sales list
       Navigator.pop(context);
     }
@@ -109,7 +109,7 @@ class _AddSalesState extends State<AddSales> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final isMobile = size.width < 800;
-    
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Add New Sale'),
@@ -125,15 +125,13 @@ class _AddSalesState extends State<AddSales> {
           padding: const EdgeInsets.all(16.0),
           child: Form(
             key: _formKey,
-            child: isMobile
-                ? _buildMobileForm()
-                : _buildDesktopForm(),
+            child: isMobile ? _buildMobileForm() : _buildDesktopForm(),
           ),
         ),
       ),
     );
   }
-  
+
   Widget _buildMobileForm() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -154,7 +152,7 @@ class _AddSalesState extends State<AddSales> {
       ],
     );
   }
-  
+
   Widget _buildDesktopForm() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -164,18 +162,11 @@ class _AddSalesState extends State<AddSales> {
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(
-              flex: 2,
-              child: _buildCustomerField(),
-            ),
+            Expanded(flex: 2, child: _buildCustomerField()),
             const SizedBox(width: 16),
-            Expanded(
-              child: _buildDateField(),
-            ),
+            Expanded(child: _buildDateField()),
             const SizedBox(width: 16),
-            Expanded(
-              child: _buildStatusField(),
-            ),
+            Expanded(child: _buildStatusField()),
           ],
         ),
         const SizedBox(height: 24),
@@ -187,30 +178,24 @@ class _AddSalesState extends State<AddSales> {
       ],
     );
   }
-  
+
   Widget _buildFormHeader() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text(
           'Create New Sale',
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 8),
         Text(
           'Add a new sale record to the system',
-          style: TextStyle(
-            fontSize: 14,
-            color: Colors.grey[600],
-          ),
+          style: TextStyle(fontSize: 14, color: Colors.grey[600]),
         ),
       ],
     );
   }
-  
+
   Widget _buildCustomerField() {
     return TextFormField(
       controller: _customerController,
@@ -218,9 +203,7 @@ class _AddSalesState extends State<AddSales> {
         labelText: 'Customer Name',
         hintText: 'Enter customer name',
         prefixIcon: const Icon(Icons.person_outline),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
         fillColor: Colors.white,
         filled: true,
       ),
@@ -232,7 +215,7 @@ class _AddSalesState extends State<AddSales> {
       },
     );
   }
-  
+
   Widget _buildDateField() {
     return InkWell(
       onTap: () => _selectDate(context),
@@ -240,9 +223,7 @@ class _AddSalesState extends State<AddSales> {
         decoration: InputDecoration(
           labelText: 'Sale Date',
           prefixIcon: const Icon(Icons.calendar_today),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
           fillColor: Colors.white,
           filled: true,
         ),
@@ -259,25 +240,24 @@ class _AddSalesState extends State<AddSales> {
       ),
     );
   }
-  
+
   Widget _buildStatusField() {
     return DropdownButtonFormField<String>(
       value: _selectedStatus,
       decoration: InputDecoration(
         labelText: 'Status',
         prefixIcon: const Icon(Icons.flag_outlined),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
         fillColor: Colors.white,
         filled: true,
       ),
-      items: ['Pending', 'Paid', 'Completed']
-          .map((status) => DropdownMenuItem(
-                value: status,
-                child: Text(status),
-              ))
-          .toList(),
+      items:
+          ['Pending', 'Paid', 'Completed']
+              .map(
+                (status) =>
+                    DropdownMenuItem(value: status, child: Text(status)),
+              )
+              .toList(),
       onChanged: (value) {
         if (value != null) {
           setState(() {
@@ -287,7 +267,7 @@ class _AddSalesState extends State<AddSales> {
       },
     );
   }
-  
+
   Widget _buildItemsSection() {
     return Container(
       padding: const EdgeInsets.all(16),
@@ -296,7 +276,7 @@ class _AddSalesState extends State<AddSales> {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
+            color: Colors.grey.withAlpha((0.1 * 255).toInt()),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -310,18 +290,13 @@ class _AddSalesState extends State<AddSales> {
             children: [
               const Text(
                 'Items',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               TextButton.icon(
                 onPressed: _addItem,
                 icon: const Icon(Icons.add),
                 label: const Text('Add Item'),
-                style: TextButton.styleFrom(
-                  foregroundColor: Colors.indigo,
-                ),
+                style: TextButton.styleFrom(foregroundColor: Colors.indigo),
               ),
             ],
           ),
@@ -339,11 +314,11 @@ class _AddSalesState extends State<AddSales> {
       ),
     );
   }
-  
+
   Widget _buildItemRow(int index) {
     final item = _items[index];
     final isMobile = MediaQuery.of(context).size.width < 800;
-    
+
     if (isMobile) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -353,9 +328,7 @@ class _AddSalesState extends State<AddSales> {
             children: [
               Text(
                 'Item ${index + 1}',
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                ),
+                style: const TextStyle(fontWeight: FontWeight.bold),
               ),
               IconButton(
                 icon: const Icon(Icons.delete_outline, color: Colors.red),
@@ -430,9 +403,7 @@ class _AddSalesState extends State<AddSales> {
             alignment: Alignment.centerRight,
             child: Text(
               'Subtotal: \$${_calculateSubtotal(item)}',
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-              ),
+              style: const TextStyle(fontWeight: FontWeight.bold),
             ),
           ),
         ],
@@ -504,9 +475,7 @@ class _AddSalesState extends State<AddSales> {
             width: 100,
             child: Text(
               '\$${_calculateSubtotal(item)}',
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-              ),
+              style: const TextStyle(fontWeight: FontWeight.bold),
             ),
           ),
           IconButton(
@@ -518,19 +487,19 @@ class _AddSalesState extends State<AddSales> {
       );
     }
   }
-  
+
   String _calculateSubtotal(SaleItem item) {
     final quantity = double.tryParse(item.quantityController.text) ?? 0;
     final price = double.tryParse(item.priceController.text) ?? 0;
     final subtotal = quantity * price;
     return subtotal.toStringAsFixed(2);
   }
-  
+
   Widget _buildTotalSection() {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.indigo.withOpacity(0.1),
+        color: Colors.indigo.withAlpha((0.1 * 255).toInt()),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
@@ -538,10 +507,7 @@ class _AddSalesState extends State<AddSales> {
         children: [
           const Text(
             'Total Amount:',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           Text(
             '\$${_totalAmount.toStringAsFixed(2)}',
@@ -555,7 +521,7 @@ class _AddSalesState extends State<AddSales> {
       ),
     );
   }
-  
+
   Widget _buildActionButtons(bool isMobile) {
     if (isMobile) {
       return Column(
@@ -576,7 +542,6 @@ class _AddSalesState extends State<AddSales> {
           const SizedBox(height: 12),
           OutlinedButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
             style: OutlinedButton.styleFrom(
               foregroundColor: Colors.indigo,
               padding: const EdgeInsets.symmetric(vertical: 16),
@@ -585,6 +550,7 @@ class _AddSalesState extends State<AddSales> {
                 borderRadius: BorderRadius.circular(12),
               ),
             ),
+            child: const Text('Cancel'),
           ),
         ],
       );
@@ -594,7 +560,6 @@ class _AddSalesState extends State<AddSales> {
         children: [
           OutlinedButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
             style: OutlinedButton.styleFrom(
               foregroundColor: Colors.indigo,
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
@@ -603,6 +568,7 @@ class _AddSalesState extends State<AddSales> {
                 borderRadius: BorderRadius.circular(12),
               ),
             ),
+            child: const Text('Cancel'),
           ),
           const SizedBox(width: 16),
           ElevatedButton.icon(
@@ -627,7 +593,7 @@ class SaleItem {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController quantityController = TextEditingController();
   final TextEditingController priceController = TextEditingController();
-  
+
   SaleItem() {
     quantityController.text = '1';
     priceController.text = '0.00';

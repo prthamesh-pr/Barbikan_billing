@@ -268,7 +268,9 @@ class _PurchasePartyListViewState extends State<PurchasePartyListView>
                     children: [
                       // List header
                       Container(
-                        color: Theme.of(context).primaryColor.withOpacity(0.1),
+                        color: Theme.of(
+                          context,
+                        ).primaryColor.withAlpha((0.1 * 255).toInt()),
                         padding: EdgeInsets.symmetric(
                           horizontal: 16,
                           vertical: 12,
@@ -301,9 +303,8 @@ class _PurchasePartyListViewState extends State<PurchasePartyListView>
                                 padding: EdgeInsets.symmetric(vertical: 4),
                                 color:
                                     selectedPartyIndex == index
-                                        ? Theme.of(
-                                          context,
-                                        ).primaryColor.withOpacity(0.1)
+                                        ? Theme.of(context).primaryColor
+                                            .withAlpha((0.1 * 255).toInt())
                                         : (index % 2 == 0
                                             ? Colors.white
                                             : Colors.grey.shade50),
@@ -354,7 +355,6 @@ class _PurchasePartyListViewState extends State<PurchasePartyListView>
     );
   }
 
-
   Widget _buildDetailHeader() {
     if (selectedPartyIndex == null) return SizedBox();
 
@@ -388,53 +388,53 @@ class _PurchasePartyListViewState extends State<PurchasePartyListView>
     );
   }
 
- Widget _buildAddButton(bool isMobile) {
-  return GestureDetector(
-    onTap: () {
-      // Option 1: Navigate to a new full screen page
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) => Scaffold(
-            body: CreatePurchasePartyView(),
+  Widget _buildAddButton(bool isMobile) {
+    return GestureDetector(
+      onTap: () {
+        // Option 1: Navigate to a new full screen page
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => Scaffold(body: CreatePurchasePartyView()),
           ),
+        );
+
+        // Option 2: If you're using a drawer approach
+        // Make sure scaffoldKey is defined in your class
+        // final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+        //
+        // Then update your state or provider
+        // setState(() {
+        //   currentView = CreatePurchasePartyView();
+        // });
+        // scaffoldKey.currentState!.openEndDrawer();
+      },
+      child: Container(
+        padding: EdgeInsets.symmetric(
+          horizontal: isMobile ? 10 : 15,
+          vertical: isMobile ? 6 : 8,
         ),
-      );
-      
-      // Option 2: If you're using a drawer approach
-      // Make sure scaffoldKey is defined in your class
-      // final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-      // 
-      // Then update your state or provider
-      // setState(() {
-      //   currentView = CreatePurchasePartyView();
-      // });
-      // scaffoldKey.currentState!.openEndDrawer();
-    },
-    child: Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: isMobile ? 10 : 15,
-        vertical: isMobile ? 6 : 8,
-      ),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        color: Theme.of(context).primaryColor,
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(Icons.add, color: Colors.white, size: isMobile ? 16 : 20),
-          if (!isMobile) ...[
-            const SizedBox(width: 5),
-            Text(
-              "Add New",
-              style: Theme.of(context).textTheme.labelMedium!.copyWith(color: Colors.white),
-            ),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: Theme.of(context).primaryColor,
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.add, color: Colors.white, size: isMobile ? 16 : 20),
+            if (!isMobile) ...[
+              const SizedBox(width: 5),
+              Text(
+                "Add New",
+                style: Theme.of(
+                  context,
+                ).textTheme.labelMedium!.copyWith(color: Colors.white),
+              ),
+            ],
           ],
-        ],
+        ),
       ),
-    ),
-  );
-}
+    );
+  }
 
   Widget _buildActionButton({
     required IconData icon,

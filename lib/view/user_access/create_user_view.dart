@@ -10,12 +10,12 @@ class CreateNewUserView extends StatefulWidget {
 
 class _CreateNewUserViewState extends State<CreateNewUserView> {
   String? accType = "staff";
-  
+
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
     final isSmallScreen = screenSize.width < 600;
-    
+
     return Material(
       color: Colors.white,
       child: Column(
@@ -23,10 +23,9 @@ class _CreateNewUserViewState extends State<CreateNewUserView> {
         children: [
           // Header section with title and close button
           Padding(
-            padding: EdgeInsets.all(screenSize.width * 0.02).clamp(
-              const EdgeInsets.all(10.0), 
-              const EdgeInsets.all(20.0)
-            ),
+            padding: EdgeInsets.all(
+              screenSize.width * 0.02,
+            ).clamp(const EdgeInsets.all(10.0), const EdgeInsets.all(20.0)),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -69,20 +68,23 @@ class _CreateNewUserViewState extends State<CreateNewUserView> {
               ],
             ),
           ),
-          
+
           const Divider(height: 0, color: Color(0xffEEEEEE)),
-          
+
           // Form content in scrollable container
           Expanded(
             child: LayoutBuilder(
               builder: (context, constraints) {
                 // Calculate adaptive spacing
-                final verticalSpacing = (constraints.maxHeight * 0.02).clamp(10.0, 20.0);
-                
+                final verticalSpacing = (constraints.maxHeight * 0.02).clamp(
+                  10.0,
+                  20.0,
+                );
+
                 return ListView(
                   padding: EdgeInsets.all(constraints.maxWidth * 0.03).clamp(
                     const EdgeInsets.all(10.0),
-                    const EdgeInsets.all(20.0)
+                    const EdgeInsets.all(20.0),
                   ),
                   children: [
                     // Username and Mobile fields
@@ -102,11 +104,11 @@ class _CreateNewUserViewState extends State<CreateNewUserView> {
                           icon: Iconsax.call,
                           hint: "Enter Contact Number",
                         ),
-                      ]
+                      ],
                     ),
-                    
+
                     SizedBox(height: verticalSpacing),
-                    
+
                     // Password fields
                     _buildFormRow(
                       context,
@@ -126,11 +128,11 @@ class _CreateNewUserViewState extends State<CreateNewUserView> {
                           hint: "Enter Password",
                           obscureText: true,
                         ),
-                      ]
+                      ],
                     ),
-                    
+
                     SizedBox(height: verticalSpacing),
-                    
+
                     // Account type dropdown
                     _buildFormRow(
                       context,
@@ -143,14 +145,14 @@ class _CreateNewUserViewState extends State<CreateNewUserView> {
                           hint: "Choose Account Type",
                         ),
                         if (!isSmallScreen) const Spacer(),
-                      ]
+                      ],
                     ),
                   ],
                 );
-              }
+              },
             ),
           ),
-          
+
           // Bottom action buttons
           Container(
             width: double.infinity,
@@ -162,7 +164,7 @@ class _CreateNewUserViewState extends State<CreateNewUserView> {
               color: Colors.white,
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
+                  color: Colors.black.withAlpha((0.05 * 255).toInt()),
                   blurRadius: 5,
                   offset: const Offset(0, -1),
                 ),
@@ -192,31 +194,32 @@ class _CreateNewUserViewState extends State<CreateNewUserView> {
       ),
     );
   }
-  
+
   // Helper method to build form rows that adapt to screen size
-  Widget _buildFormRow(BuildContext context, {
+  Widget _buildFormRow(
+    BuildContext context, {
     required bool isSmallScreen,
     required List<Widget> fields,
   }) {
     return isSmallScreen
         ? Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              for (int i = 0; i < fields.length; i++) ...[
-                if (i > 0) const SizedBox(height: 15),
-                fields[i],
-              ],
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            for (int i = 0; i < fields.length; i++) ...[
+              if (i > 0) const SizedBox(height: 15),
+              fields[i],
             ],
-          )
+          ],
+        )
         : Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              for (int i = 0; i < fields.length; i++) ...[
-                if (i > 0) const SizedBox(width: 15),
-                Expanded(child: fields[i]),
-              ],
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            for (int i = 0; i < fields.length; i++) ...[
+              if (i > 0) const SizedBox(width: 15),
+              Expanded(child: fields[i]),
             ],
-          );
+          ],
+        );
   }
 
   // Helper method to build consistent form fields
@@ -230,10 +233,7 @@ class _CreateNewUserViewState extends State<CreateNewUserView> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label,
-          style: Theme.of(context).textTheme.labelLarge,
-        ),
+        Text(label, style: Theme.of(context).textTheme.labelLarge),
         const SizedBox(height: 5),
         TextFormField(
           obscureText: obscureText,
@@ -256,7 +256,7 @@ class _CreateNewUserViewState extends State<CreateNewUserView> {
       ],
     );
   }
-  
+
   // Helper method to build dropdown field
   Widget _buildDropdownField({
     required BuildContext context,
@@ -267,22 +267,13 @@ class _CreateNewUserViewState extends State<CreateNewUserView> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label,
-          style: Theme.of(context).textTheme.labelLarge,
-        ),
+        Text(label, style: Theme.of(context).textTheme.labelLarge),
         const SizedBox(height: 5),
         DropdownButtonFormField(
           value: accType,
           items: const [
-            DropdownMenuItem(
-              value: "staff",
-              child: Text("Staff"),
-            ),
-            DropdownMenuItem(
-              value: "admin",
-              child: Text("Admin"),
-            ),
+            DropdownMenuItem(value: "staff", child: Text("Staff")),
+            DropdownMenuItem(value: "admin", child: Text("Admin")),
           ],
           onChanged: (value) {
             setState(() {
@@ -308,7 +299,7 @@ class _CreateNewUserViewState extends State<CreateNewUserView> {
       ],
     );
   }
-  
+
   // Helper method to build action buttons
   Widget _buildActionButton({
     required BuildContext context,
@@ -320,15 +311,13 @@ class _CreateNewUserViewState extends State<CreateNewUserView> {
       onTap: onTap,
       borderRadius: BorderRadius.circular(5),
       child: Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 16,
-          vertical: 12,
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5),
-          color: isOutlined 
-              ? const Color(0xffEEEEEE)
-              : Theme.of(context).primaryColor,
+          color:
+              isOutlined
+                  ? const Color(0xffEEEEEE)
+                  : Theme.of(context).primaryColor,
         ),
         child: Text(
           label,

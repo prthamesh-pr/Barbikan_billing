@@ -76,9 +76,15 @@ class _StockListViewState extends State<StockListView> {
       return stockItems;
     }
     return stockItems.where((item) {
-      return item['name'].toString().toLowerCase().contains(searchQuery.toLowerCase()) ||
-             item['sku'].toString().toLowerCase().contains(searchQuery.toLowerCase()) ||
-             item['category'].toString().toLowerCase().contains(searchQuery.toLowerCase());
+      return item['name'].toString().toLowerCase().contains(
+            searchQuery.toLowerCase(),
+          ) ||
+          item['sku'].toString().toLowerCase().contains(
+            searchQuery.toLowerCase(),
+          ) ||
+          item['category'].toString().toLowerCase().contains(
+            searchQuery.toLowerCase(),
+          );
     }).toList();
   }
 
@@ -88,16 +94,17 @@ class _StockListViewState extends State<StockListView> {
       builder: (context, constraints) {
         // Check if we're on a mobile device (width < 600)
         final isMobile = constraints.maxWidth < 600;
-        
+
         return ListView(
           padding: EdgeInsets.all(isMobile ? 10 : 15),
           children: [
             // Header section
             SizedBox(
               width: double.infinity,
-              child: isMobile 
-                ? _buildMobileHeader(context)
-                : _buildDesktopHeader(context),
+              child:
+                  isMobile
+                      ? _buildMobileHeader(context)
+                      : _buildDesktopHeader(context),
             ),
 
             SizedBox(height: isMobile ? 10 : 15),
@@ -108,12 +115,12 @@ class _StockListViewState extends State<StockListView> {
             SizedBox(height: isMobile ? 10 : 15),
 
             // Stock items list
-            isMobile 
+            isMobile
                 ? _buildMobileStockList(context)
                 : _buildDesktopStockList(context),
           ],
         );
-      }
+      },
     );
   }
 
@@ -136,37 +143,34 @@ class _StockListViewState extends State<StockListView> {
             ],
           ),
         ),
-   InkWell(
-  onTap: () {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => AddNewItemPage()),
-    );
-  },
-  child: Container(
-    padding: const EdgeInsets.symmetric(
-      horizontal: 15,
-      vertical: 8,
-    ),
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(100),
-      color: Theme.of(context).primaryColor,
-    ),
-    child: Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(Icons.add, color: Colors.white, size: 20),
-        const SizedBox(width: 10),
-        Text(
-          "Add New Item",
-          style: Theme.of(
-            context,
-          ).textTheme.labelLarge!.copyWith(color: Colors.white),
+        InkWell(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => AddNewItemPage()),
+            );
+          },
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(100),
+              color: Theme.of(context).primaryColor,
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.add, color: Colors.white, size: 20),
+                const SizedBox(width: 10),
+                Text(
+                  "Add New Item",
+                  style: Theme.of(
+                    context,
+                  ).textTheme.labelLarge!.copyWith(color: Colors.white),
+                ),
+              ],
+            ),
+          ),
         ),
-      ],
-    ),
-  ),
-)
       ],
     );
   }
@@ -188,10 +192,7 @@ class _StockListViewState extends State<StockListView> {
           width: double.infinity,
           child: ElevatedButton.icon(
             icon: Icon(Icons.add, color: Colors.white, size: 16),
-            label: Text(
-              "Add New Item",
-              style: TextStyle(color: Colors.white),
-            ),
+            label: Text("Add New Item", style: TextStyle(color: Colors.white)),
             style: ElevatedButton.styleFrom(
               backgroundColor: Theme.of(context).primaryColor,
               padding: EdgeInsets.symmetric(vertical: 12),
@@ -217,7 +218,7 @@ class _StockListViewState extends State<StockListView> {
         borderRadius: BorderRadius.circular(8),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withAlpha((0.05 * 255).toInt()),
             blurRadius: 4,
             offset: Offset(0, 2),
           ),
@@ -246,7 +247,7 @@ class _StockListViewState extends State<StockListView> {
         borderRadius: BorderRadius.circular(10),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withAlpha((0.05 * 255).toInt()),
             blurRadius: 4,
             offset: Offset(0, 2),
           ),
@@ -265,142 +266,143 @@ class _StockListViewState extends State<StockListView> {
           DataColumn(label: Text('Status')),
           DataColumn(label: Text('Action')),
         ],
-        rows: filteredStockItems.map((item) {
-          return DataRow(
-            cells: [
-              DataCell(Text(item['sku'])),
-              DataCell(Text(item['name'])),
-              DataCell(Text(item['category'])),
-              DataCell(Text('${item['quantity']} ${item['unit']}')),
-              DataCell(Text(item['buyingPrice'])),
-              DataCell(Text(item['sellingPrice'])),
-              DataCell(_buildStatusIndicator(item['status'])),
-              DataCell(
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    IconButton(
-                      color: Colors.blue,
-                      icon: Icon(Iconsax.edit),
-                      onPressed: () => _showEditItemDialog(context, item),
+        rows:
+            filteredStockItems.map((item) {
+              return DataRow(
+                cells: [
+                  DataCell(Text(item['sku'])),
+                  DataCell(Text(item['name'])),
+                  DataCell(Text(item['category'])),
+                  DataCell(Text('${item['quantity']} ${item['unit']}')),
+                  DataCell(Text(item['buyingPrice'])),
+                  DataCell(Text(item['sellingPrice'])),
+                  DataCell(_buildStatusIndicator(item['status'])),
+                  DataCell(
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          color: Colors.blue,
+                          icon: Icon(Iconsax.edit),
+                          onPressed: () => _showEditItemDialog(context, item),
+                        ),
+                        IconButton(
+                          color: Colors.red,
+                          icon: Icon(Iconsax.trash),
+                          onPressed:
+                              () => _showDeleteConfirmation(context, item),
+                        ),
+                      ],
                     ),
-                    IconButton(
-                      color: Colors.red,
-                      icon: Icon(Iconsax.trash),
-                      onPressed: () => _showDeleteConfirmation(context, item),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          );
-        }).toList(),
+                  ),
+                ],
+              );
+            }).toList(),
       ),
     );
   }
 
   Widget _buildMobileStockList(BuildContext context) {
     return Column(
-      children: filteredStockItems.map((item) {
-        return Card(
-          margin: EdgeInsets.only(bottom: 12),
-          elevation: 2,
-          child: Padding(
-            padding: EdgeInsets.all(12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children:
+          filteredStockItems.map((item) {
+            return Card(
+              margin: EdgeInsets.only(bottom: 12),
+              elevation: 2,
+              child: Padding(
+                padding: EdgeInsets.all(12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(
-                      child: Text(
-                        item['name'],
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            item['name'],
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
                         ),
-                      ),
+                        _buildStatusIndicator(item['status']),
+                      ],
                     ),
-                    _buildStatusIndicator(item['status']),
+                    SizedBox(height: 6),
+                    Text(
+                      'SKU: ${item['sku']}',
+                      style: TextStyle(color: Colors.grey[600], fontSize: 14),
+                    ),
+                    SizedBox(height: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Category: ${item['category']}',
+                          style: TextStyle(fontSize: 14),
+                        ),
+                        Text(
+                          'Qty: ${item['quantity']} ${item['unit']}',
+                          style: TextStyle(fontSize: 14),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 6),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Buy: ${item['buyingPrice']}',
+                          style: TextStyle(fontSize: 14),
+                        ),
+                        Text(
+                          'Sell: ${item['sellingPrice']}',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: Theme.of(context).primaryColor,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 12),
+                    Divider(height: 1),
+                    SizedBox(height: 8),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        TextButton.icon(
+                          icon: Icon(Iconsax.edit, size: 18),
+                          label: Text('Edit'),
+                          onPressed: () => _showEditItemDialog(context, item),
+                          style: TextButton.styleFrom(
+                            foregroundColor: Colors.blue,
+                          ),
+                        ),
+                        SizedBox(width: 8),
+                        TextButton.icon(
+                          icon: Icon(Iconsax.trash, size: 18),
+                          label: Text('Delete'),
+                          onPressed:
+                              () => _showDeleteConfirmation(context, item),
+                          style: TextButton.styleFrom(
+                            foregroundColor: Colors.red,
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
-                SizedBox(height: 6),
-                Text(
-                  'SKU: ${item['sku']}',
-                  style: TextStyle(
-                    color: Colors.grey[600],
-                    fontSize: 14,
-                  ),
-                ),
-                SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Category: ${item['category']}',
-                      style: TextStyle(fontSize: 14),
-                    ),
-                    Text(
-                      'Qty: ${item['quantity']} ${item['unit']}',
-                      style: TextStyle(fontSize: 14),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 6),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Buy: ${item['buyingPrice']}',
-                      style: TextStyle(fontSize: 14),
-                    ),
-                    Text(
-                      'Sell: ${item['sellingPrice']}',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context).primaryColor,
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 12),
-                Divider(height: 1),
-                SizedBox(height: 8),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    TextButton.icon(
-                      icon: Icon(Iconsax.edit, size: 18),
-                      label: Text('Edit'),
-                      onPressed: () => _showEditItemDialog(context, item),
-                      style: TextButton.styleFrom(
-                        foregroundColor: Colors.blue,
-                      ),
-                    ),
-                    SizedBox(width: 8),
-                    TextButton.icon(
-                      icon: Icon(Iconsax.trash, size: 18),
-                      label: Text('Delete'),
-                      onPressed: () => _showDeleteConfirmation(context, item),
-                      style: TextButton.styleFrom(
-                        foregroundColor: Colors.red,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        );
-      }).toList(),
+              ),
+            );
+          }).toList(),
     );
   }
 
   Widget _buildStatusIndicator(String status) {
     Color color;
-    
+
     switch (status) {
       case 'In Stock':
         color = Colors.green;
@@ -414,11 +416,11 @@ class _StockListViewState extends State<StockListView> {
       default:
         color = Colors.grey;
     }
-    
+
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color.withAlpha((0.1 * 255).toInt()),
         borderRadius: BorderRadius.circular(30),
         border: Border.all(color: color),
       ),
@@ -438,10 +440,13 @@ class _StockListViewState extends State<StockListView> {
     final TextEditingController skuController = TextEditingController();
     final TextEditingController categoryController = TextEditingController();
     final TextEditingController quantityController = TextEditingController();
-    final TextEditingController unitController = TextEditingController(text: 'pcs');
+    final TextEditingController unitController = TextEditingController(
+      text: 'pcs',
+    );
     final TextEditingController buyingPriceController = TextEditingController();
-    final TextEditingController sellingPriceController = TextEditingController();
-    
+    final TextEditingController sellingPriceController =
+        TextEditingController();
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -552,19 +557,20 @@ class _StockListViewState extends State<StockListView> {
                   'unit': unitController.text,
                   'buyingPrice': '₹${buyingPriceController.text}',
                   'sellingPrice': '₹${sellingPriceController.text}',
-                  'status': int.tryParse(quantityController.text) == 0 
-                      ? 'Out of Stock' 
-                      : (int.tryParse(quantityController.text) ?? 0) < 5 
-                          ? 'Low Stock' 
+                  'status':
+                      int.tryParse(quantityController.text) == 0
+                          ? 'Out of Stock'
+                          : (int.tryParse(quantityController.text) ?? 0) < 5
+                          ? 'Low Stock'
                           : 'In Stock',
                 };
-                
+
                 setState(() {
                   stockItems.add(newItem);
                 });
-                
+
                 Navigator.of(context).pop();
-                
+
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text('Item added successfully')),
                 );
@@ -578,14 +584,28 @@ class _StockListViewState extends State<StockListView> {
   }
 
   void _showEditItemDialog(BuildContext context, Map<String, dynamic> item) {
-    final TextEditingController nameController = TextEditingController(text: item['name']);
-    final TextEditingController skuController = TextEditingController(text: item['sku']);
-    final TextEditingController categoryController = TextEditingController(text: item['category']);
-    final TextEditingController quantityController = TextEditingController(text: item['quantity'].toString());
-    final TextEditingController unitController = TextEditingController(text: item['unit']);
-    final TextEditingController buyingPriceController = TextEditingController(text: item['buyingPrice'].toString().replaceAll('₹', ''));
-    final TextEditingController sellingPriceController = TextEditingController(text: item['sellingPrice'].toString().replaceAll('₹', ''));
-    
+    final TextEditingController nameController = TextEditingController(
+      text: item['name'],
+    );
+    final TextEditingController skuController = TextEditingController(
+      text: item['sku'],
+    );
+    final TextEditingController categoryController = TextEditingController(
+      text: item['category'],
+    );
+    final TextEditingController quantityController = TextEditingController(
+      text: item['quantity'].toString(),
+    );
+    final TextEditingController unitController = TextEditingController(
+      text: item['unit'],
+    );
+    final TextEditingController buyingPriceController = TextEditingController(
+      text: item['buyingPrice'].toString().replaceAll('₹', ''),
+    );
+    final TextEditingController sellingPriceController = TextEditingController(
+      text: item['sellingPrice'].toString().replaceAll('₹', ''),
+    );
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -696,22 +716,25 @@ class _StockListViewState extends State<StockListView> {
                   'unit': unitController.text,
                   'buyingPrice': '₹${buyingPriceController.text}',
                   'sellingPrice': '₹${sellingPriceController.text}',
-                  'status': int.tryParse(quantityController.text) == 0 
-                      ? 'Out of Stock' 
-                      : (int.tryParse(quantityController.text) ?? 0) < 5 
-                          ? 'Low Stock' 
+                  'status':
+                      int.tryParse(quantityController.text) == 0
+                          ? 'Out of Stock'
+                          : (int.tryParse(quantityController.text) ?? 0) < 5
+                          ? 'Low Stock'
                           : 'In Stock',
                 };
-                
+
                 setState(() {
-                  final index = stockItems.indexWhere((element) => element['id'] == item['id']);
+                  final index = stockItems.indexWhere(
+                    (element) => element['id'] == item['id'],
+                  );
                   if (index != -1) {
                     stockItems[index] = updatedItem;
                   }
                 });
-                
+
                 Navigator.of(context).pop();
-                
+
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text('Item updated successfully')),
                 );
@@ -724,7 +747,10 @@ class _StockListViewState extends State<StockListView> {
     );
   }
 
-  void _showDeleteConfirmation(BuildContext context, Map<String, dynamic> item) {
+  void _showDeleteConfirmation(
+    BuildContext context,
+    Map<String, dynamic> item,
+  ) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -739,12 +765,12 @@ class _StockListViewState extends State<StockListView> {
               child: Text('Cancel'),
             ),
             TextButton(
-              style: TextButton.styleFrom(
-                foregroundColor: Colors.red,
-              ),
+              style: TextButton.styleFrom(foregroundColor: Colors.red),
               onPressed: () {
                 setState(() {
-                  stockItems.removeWhere((element) => element['id'] == item['id']);
+                  stockItems.removeWhere(
+                    (element) => element['id'] == item['id'],
+                  );
                 });
                 Navigator.of(context).pop();
                 ScaffoldMessenger.of(context).showSnackBar(

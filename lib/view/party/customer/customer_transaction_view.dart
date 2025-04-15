@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
 class CustomerTransactionView extends StatefulWidget {
-  const CustomerTransactionView({Key? key}) : super(key: key);
+  const CustomerTransactionView({super.key});
 
   @override
-  State<CustomerTransactionView> createState() => _CustomerTransactionViewState();
+  State<CustomerTransactionView> createState() =>
+      _CustomerTransactionViewState();
 }
 
 class _CustomerTransactionViewState extends State<CustomerTransactionView> {
@@ -38,13 +39,13 @@ class _CustomerTransactionViewState extends State<CustomerTransactionView> {
       builder: (context, constraints) {
         // Get device dimensions to calculate responsive sizes
         final width = constraints.maxWidth;
-        
+
         // Calculate responsive sizes
         final headerFontSize = _getResponsiveSize(width, 18, 16, 14);
         final bodyFontSize = _getResponsiveSize(width, 16, 14, 12);
         final iconSize = _getResponsiveSize(width, 24, 20, 18);
         final padding = _getResponsiveSize(width, 16, 12, 8);
-        
+
         return Column(
           children: [
             // Header with Add Transaction button
@@ -60,16 +61,22 @@ class _CustomerTransactionViewState extends State<CustomerTransactionView> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  
                 ],
               ),
             ),
-            
+
             // Table section
             Expanded(
-              child: width < 600
-                  ? _buildCardView(bodyFontSize, iconSize, padding)
-                  : _buildTableView(width, headerFontSize, bodyFontSize, iconSize, padding),
+              child:
+                  width < 600
+                      ? _buildCardView(bodyFontSize, iconSize, padding)
+                      : _buildTableView(
+                        width,
+                        headerFontSize,
+                        bodyFontSize,
+                        iconSize,
+                        padding,
+                      ),
             ),
           ],
         );
@@ -78,8 +85,13 @@ class _CustomerTransactionViewState extends State<CustomerTransactionView> {
   }
 
   // Table layout for medium and large screens
-  Widget _buildTableView(double width, double headerFontSize, double bodyFontSize, 
-      double iconSize, double padding) {
+  Widget _buildTableView(
+    double width,
+    double headerFontSize,
+    double bodyFontSize,
+    double iconSize,
+    double padding,
+  ) {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: SizedBox(
@@ -90,69 +102,123 @@ class _CustomerTransactionViewState extends State<CustomerTransactionView> {
             child: DataTable(
               columnSpacing: padding,
               headingRowHeight: 56,
-              dataRowHeight: 52,
+              dataRowMinHeight: 52,
+              dataRowMaxHeight: 52,
               columns: [
                 DataColumn(
-                  label: Text('S.NO', 
-                    style: TextStyle(fontSize: headerFontSize, fontWeight: FontWeight.bold)),
+                  label: Text(
+                    'S.NO',
+                    style: TextStyle(
+                      fontSize: headerFontSize,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
                 DataColumn(
-                  label: Text('Date', 
-                    style: TextStyle(fontSize: headerFontSize, fontWeight: FontWeight.bold)),
+                  label: Text(
+                    'Date',
+                    style: TextStyle(
+                      fontSize: headerFontSize,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
                 DataColumn(
-                  label: Text('Bill Number', 
-                    style: TextStyle(fontSize: headerFontSize, fontWeight: FontWeight.bold)),
+                  label: Text(
+                    'Bill Number',
+                    style: TextStyle(
+                      fontSize: headerFontSize,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
                 DataColumn(
-                  label: Text('Party Name', 
-                    style: TextStyle(fontSize: headerFontSize, fontWeight: FontWeight.bold)),
+                  label: Text(
+                    'Party Name',
+                    style: TextStyle(
+                      fontSize: headerFontSize,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
                 DataColumn(
-                  label: Text('Amount', 
-                    style: TextStyle(fontSize: headerFontSize, fontWeight: FontWeight.bold)),
+                  label: Text(
+                    'Amount',
+                    style: TextStyle(
+                      fontSize: headerFontSize,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
                 DataColumn(
-                  label: Text('Actions', 
-                    style: TextStyle(fontSize: headerFontSize, fontWeight: FontWeight.bold)),
+                  label: Text(
+                    'Actions',
+                    style: TextStyle(
+                      fontSize: headerFontSize,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
               ],
-              rows: invoiceList.map((invoice) {
-                return DataRow(
-                  cells: [
-                    DataCell(Text(invoice['sno'].toString(), 
-                      style: TextStyle(fontSize: bodyFontSize))),
-                    DataCell(Text(invoice['date'], 
-                      style: TextStyle(fontSize: bodyFontSize))),
-                    DataCell(Text(invoice['billNumber'], 
-                      style: TextStyle(fontSize: bodyFontSize))),
-                    DataCell(Text(invoice['partyName'], 
-                      style: TextStyle(fontSize: bodyFontSize))),
-                    DataCell(Text(invoice['amount'], 
-                      style: TextStyle(fontSize: bodyFontSize))),
-                    DataCell(Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        IconButton(
-                          icon: Icon(Icons.visibility, size: iconSize),
-                          onPressed: () {},
-                          tooltip: 'View',
+              rows:
+                  invoiceList.map((invoice) {
+                    return DataRow(
+                      cells: [
+                        DataCell(
+                          Text(
+                            invoice['sno'].toString(),
+                            style: TextStyle(fontSize: bodyFontSize),
+                          ),
                         ),
-                        IconButton(
-                          icon: Icon(Icons.edit, size: iconSize),
-                          onPressed: () {},
-                          tooltip: 'Edit',
+                        DataCell(
+                          Text(
+                            invoice['date'],
+                            style: TextStyle(fontSize: bodyFontSize),
+                          ),
                         ),
-                        IconButton(
-                          icon: Icon(Icons.delete, size: iconSize),
-                          onPressed: () {},
-                          tooltip: 'Delete',
+                        DataCell(
+                          Text(
+                            invoice['billNumber'],
+                            style: TextStyle(fontSize: bodyFontSize),
+                          ),
+                        ),
+                        DataCell(
+                          Text(
+                            invoice['partyName'],
+                            style: TextStyle(fontSize: bodyFontSize),
+                          ),
+                        ),
+                        DataCell(
+                          Text(
+                            invoice['amount'],
+                            style: TextStyle(fontSize: bodyFontSize),
+                          ),
+                        ),
+                        DataCell(
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              IconButton(
+                                icon: Icon(Icons.visibility, size: iconSize),
+                                onPressed: () {},
+                                tooltip: 'View',
+                              ),
+                              IconButton(
+                                icon: Icon(Icons.edit, size: iconSize),
+                                onPressed: () {},
+                                tooltip: 'Edit',
+                              ),
+                              IconButton(
+                                icon: Icon(Icons.delete, size: iconSize),
+                                onPressed: () {},
+                                tooltip: 'Delete',
+                              ),
+                            ],
+                          ),
                         ),
                       ],
-                    )),
-                  ],
-                );
-              }).toList(),
+                    );
+                  }).toList(),
             ),
           ),
         ),
@@ -196,10 +262,14 @@ class _CustomerTransactionViewState extends State<CustomerTransactionView> {
                   ],
                 ),
                 SizedBox(height: padding / 2),
-                Text('Date: ${invoice['date']}',
-                    style: TextStyle(fontSize: fontSize)),
-                Text('Party: ${invoice['partyName']}',
-                    style: TextStyle(fontSize: fontSize)),
+                Text(
+                  'Date: ${invoice['date']}',
+                  style: TextStyle(fontSize: fontSize),
+                ),
+                Text(
+                  'Party: ${invoice['partyName']}',
+                  style: TextStyle(fontSize: fontSize),
+                ),
                 SizedBox(height: padding / 2),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
@@ -230,7 +300,12 @@ class _CustomerTransactionViewState extends State<CustomerTransactionView> {
   }
 
   // Helper method to calculate responsive sizes
-  double _getResponsiveSize(double width, double large, double medium, double small) {
+  double _getResponsiveSize(
+    double width,
+    double large,
+    double medium,
+    double small,
+  ) {
     if (width > 1200) {
       return large;
     } else if (width > 600) {

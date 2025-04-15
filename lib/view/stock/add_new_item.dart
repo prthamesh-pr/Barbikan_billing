@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AddNewItemPage extends StatefulWidget {
-  const AddNewItemPage({Key? key}) : super(key: key);
+  const AddNewItemPage({super.key});
 
   @override
   State<AddNewItemPage> createState() => _AddNewItemPageState();
@@ -22,7 +22,7 @@ class _AddNewItemPageState extends State<AddNewItemPage> {
     'Clothing',
     'Groceries',
     'Household',
-    'Others'
+    'Others',
   ];
 
   @override
@@ -51,14 +51,14 @@ class _AddNewItemPageState extends State<AddNewItemPage> {
       body: LayoutBuilder(
         builder: (context, constraints) {
           final isDesktop = constraints.maxWidth > 800;
-          
+
           return Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  Theme.of(context).primaryColor.withOpacity(0.1),
+                  Theme.of(context).primaryColor.withAlpha((0.1 * 255).toInt()),
                   Colors.white,
                 ],
               ),
@@ -67,9 +67,7 @@ class _AddNewItemPageState extends State<AddNewItemPage> {
               child: SingleChildScrollView(
                 padding: const EdgeInsets.all(24.0),
                 child: ConstrainedBox(
-                  constraints: BoxConstraints(
-                    maxWidth: isDesktop ? 1000 : 600,
-                  ),
+                  constraints: BoxConstraints(maxWidth: isDesktop ? 1000 : 600),
                   child: Card(
                     elevation: 4,
                     shape: RoundedRectangleBorder(
@@ -92,7 +90,9 @@ class _AddNewItemPageState extends State<AddNewItemPage> {
                                 const SizedBox(width: 12),
                                 Text(
                                   'Item Information',
-                                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                                  style: Theme.of(
+                                    context,
+                                  ).textTheme.headlineSmall?.copyWith(
                                     fontWeight: FontWeight.bold,
                                     color: Theme.of(context).primaryColor,
                                   ),
@@ -100,15 +100,15 @@ class _AddNewItemPageState extends State<AddNewItemPage> {
                               ],
                             ),
                             const Divider(height: 40),
-                            
+
                             // Basic Info Section
                             if (isDesktop)
                               _buildDesktopLayout()
                             else
                               _buildMobileLayout(),
-                              
+
                             const SizedBox(height: 30),
-                            
+
                             // Action Buttons
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -118,7 +118,10 @@ class _AddNewItemPageState extends State<AddNewItemPage> {
                                   icon: const Icon(Icons.cancel),
                                   label: const Text('Cancel'),
                                   style: OutlinedButton.styleFrom(
-                                    padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 30,
+                                      vertical: 15,
+                                    ),
                                     foregroundColor: Colors.grey[800],
                                   ),
                                 ),
@@ -128,8 +131,12 @@ class _AddNewItemPageState extends State<AddNewItemPage> {
                                   icon: const Icon(Icons.save),
                                   label: const Text('Save Item'),
                                   style: ElevatedButton.styleFrom(
-                                    padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-                                    backgroundColor: Theme.of(context).primaryColor,
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 30,
+                                      vertical: 15,
+                                    ),
+                                    backgroundColor:
+                                        Theme.of(context).primaryColor,
                                     foregroundColor: Colors.white,
                                     elevation: 2,
                                   ),
@@ -177,7 +184,7 @@ class _AddNewItemPageState extends State<AddNewItemPage> {
           ],
         ),
         const SizedBox(height: 20),
-        
+
         // Row 2: Price, Quantity, and Category
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -204,21 +211,16 @@ class _AddNewItemPageState extends State<AddNewItemPage> {
               ),
             ),
             const SizedBox(width: 16),
-            Expanded(
-              child: _buildCategoryDropdown(),
-            ),
+            Expanded(child: _buildCategoryDropdown()),
           ],
         ),
         const SizedBox(height: 20),
-        
+
         // Row 3: On Sale Switch and Description
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(
-              flex: 1,
-              child: _buildOnSaleSwitch(),
-            ),
+            Expanded(flex: 1, child: _buildOnSaleSwitch()),
             const SizedBox(width: 16),
             Expanded(
               flex: 2,
@@ -246,14 +248,14 @@ class _AddNewItemPageState extends State<AddNewItemPage> {
           isRequired: true,
         ),
         const SizedBox(height: 16),
-        
+
         _buildTextField(
           controller: _skuController,
           label: 'SKU/Item Code',
           icon: Icons.qr_code,
         ),
         const SizedBox(height: 16),
-        
+
         _buildTextField(
           controller: _priceController,
           label: 'Price',
@@ -263,7 +265,7 @@ class _AddNewItemPageState extends State<AddNewItemPage> {
           prefixText: '\$',
         ),
         const SizedBox(height: 16),
-        
+
         _buildTextField(
           controller: _quantityController,
           label: 'Quantity',
@@ -273,13 +275,13 @@ class _AddNewItemPageState extends State<AddNewItemPage> {
           isInteger: true,
         ),
         const SizedBox(height: 16),
-        
+
         _buildCategoryDropdown(),
         const SizedBox(height: 16),
-        
+
         _buildOnSaleSwitch(),
         const SizedBox(height: 16),
-        
+
         _buildTextField(
           controller: _descriptionController,
           label: 'Description (Optional)',
@@ -304,9 +306,7 @@ class _AddNewItemPageState extends State<AddNewItemPage> {
       controller: controller,
       decoration: InputDecoration(
         labelText: label,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
         prefixIcon: Icon(icon),
         prefixText: prefixText,
         filled: true,
@@ -314,20 +314,21 @@ class _AddNewItemPageState extends State<AddNewItemPage> {
       ),
       keyboardType: isNumber ? TextInputType.number : TextInputType.text,
       maxLines: maxLines,
-      validator: isRequired
-          ? (value) {
-              if (value == null || value.isEmpty) {
-                return 'This field is required';
+      validator:
+          isRequired
+              ? (value) {
+                if (value == null || value.isEmpty) {
+                  return 'This field is required';
+                }
+                if (isNumber && double.tryParse(value) == null) {
+                  return 'Please enter a valid number';
+                }
+                if (isInteger && int.tryParse(value) == null) {
+                  return 'Please enter a valid integer';
+                }
+                return null;
               }
-              if (isNumber && double.tryParse(value) == null) {
-                return 'Please enter a valid number';
-              }
-              if (isInteger && int.tryParse(value) == null) {
-                return 'Please enter a valid integer';
-              }
-              return null;
-            }
-          : null,
+              : null,
     );
   }
 
@@ -335,21 +336,17 @@ class _AddNewItemPageState extends State<AddNewItemPage> {
     return DropdownButtonFormField<String>(
       decoration: InputDecoration(
         labelText: 'Category',
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
         prefixIcon: const Icon(Icons.category),
         filled: true,
         fillColor: Colors.white,
       ),
       value: _selectedCategory,
       hint: const Text('Select a category'),
-      items: _categories.map((category) {
-        return DropdownMenuItem(
-          value: category,
-          child: Text(category),
-        );
-      }).toList(),
+      items:
+          _categories.map((category) {
+            return DropdownMenuItem(value: category, child: Text(category));
+          }).toList(),
       onChanged: (value) {
         setState(() {
           _selectedCategory = value;

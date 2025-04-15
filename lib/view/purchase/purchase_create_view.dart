@@ -17,14 +17,14 @@ class _PurchaseCreateViewState extends State<PurchaseCreateView> {
       'rate': 45000,
       'tax': 18,
       'amount': 53100,
-    }
+    },
   ];
-  
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final isSmallScreen = screenWidth < 600;
-    
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -58,9 +58,7 @@ class _PurchaseCreateViewState extends State<PurchaseCreateView> {
                 },
                 icon: Icon(Icons.close),
                 label: Text("Close"),
-                style: TextButton.styleFrom(
-                  foregroundColor: Colors.grey[700],
-                ),
+                style: TextButton.styleFrom(foregroundColor: Colors.grey[700]),
               ),
             ),
         ],
@@ -81,7 +79,9 @@ class _PurchaseCreateViewState extends State<PurchaseCreateView> {
                     children: [
                       Text(
                         "Purchase Details",
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        style: Theme.of(
+                          context,
+                        ).textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.bold,
                           fontSize: isSmallScreen ? 15 : 16,
                         ),
@@ -89,51 +89,51 @@ class _PurchaseCreateViewState extends State<PurchaseCreateView> {
                       SizedBox(height: isSmallScreen ? 12 : 16),
                       isSmallScreen
                           ? Column(
-                              children: [
-                                _buildTextField(
-                                  context, 
-                                  "Bill Number", 
+                            children: [
+                              _buildTextField(
+                                context,
+                                "Bill Number",
+                                "Enter bill number",
+                                Iconsax.receipt,
+                                isSmallScreen: isSmallScreen,
+                              ),
+                              _buildTextField(
+                                context,
+                                "Date",
+                                "Select date",
+                                Iconsax.calendar,
+                                isSmallScreen: isSmallScreen,
+                              ),
+                            ],
+                          )
+                          : Row(
+                            children: [
+                              Expanded(
+                                child: _buildTextField(
+                                  context,
+                                  "Bill Number",
                                   "Enter bill number",
                                   Iconsax.receipt,
                                   isSmallScreen: isSmallScreen,
                                 ),
-                                _buildTextField(
-                                  context, 
-                                  "Date", 
+                              ),
+                              SizedBox(width: 16),
+                              Expanded(
+                                child: _buildTextField(
+                                  context,
+                                  "Date",
                                   "Select date",
                                   Iconsax.calendar,
                                   isSmallScreen: isSmallScreen,
                                 ),
-                              ],
-                            )
-                          : Row(
-                              children: [
-                                Expanded(
-                                  child: _buildTextField(
-                                    context, 
-                                    "Bill Number", 
-                                    "Enter bill number",
-                                    Iconsax.receipt,
-                                    isSmallScreen: isSmallScreen,
-                                  ),
-                                ),
-                                SizedBox(width: 16),
-                                Expanded(
-                                  child: _buildTextField(
-                                    context, 
-                                    "Date", 
-                                    "Select date",
-                                    Iconsax.calendar,
-                                    isSmallScreen: isSmallScreen,
-                                  ),
-                                ),
-                              ],
-                            ),
+                              ),
+                            ],
+                          ),
                       SizedBox(height: isSmallScreen ? 8 : 12),
                       // Party/supplier information
                       _buildTextField(
-                        context, 
-                        "Supplier/Party", 
+                        context,
+                        "Supplier/Party",
                         "Select or enter supplier name",
                         Iconsax.profile_2user,
                         isSmallScreen: isSmallScreen,
@@ -142,7 +142,7 @@ class _PurchaseCreateViewState extends State<PurchaseCreateView> {
                   ),
                 ),
               ),
-              
+
               // Products card
               Card(
                 margin: EdgeInsets.only(bottom: isSmallScreen ? 10 : 16),
@@ -156,7 +156,9 @@ class _PurchaseCreateViewState extends State<PurchaseCreateView> {
                         children: [
                           Text(
                             "Products",
-                            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            style: Theme.of(
+                              context,
+                            ).textTheme.titleMedium?.copyWith(
                               fontWeight: FontWeight.bold,
                               fontSize: isSmallScreen ? 15 : 16,
                             ),
@@ -175,10 +177,15 @@ class _PurchaseCreateViewState extends State<PurchaseCreateView> {
                                 });
                               });
                             },
-                            icon: Icon(Icons.add, size: isSmallScreen ? 16 : 18),
+                            icon: Icon(
+                              Icons.add,
+                              size: isSmallScreen ? 16 : 18,
+                            ),
                             label: Text(
                               "Add Product",
-                              style: TextStyle(fontSize: isSmallScreen ? 12 : 14),
+                              style: TextStyle(
+                                fontSize: isSmallScreen ? 12 : 14,
+                              ),
                             ),
                             style: ElevatedButton.styleFrom(
                               padding: EdgeInsets.symmetric(
@@ -192,7 +199,7 @@ class _PurchaseCreateViewState extends State<PurchaseCreateView> {
                         ],
                       ),
                       SizedBox(height: isSmallScreen ? 10 : 16),
-                      
+
                       // Products list
                       isSmallScreen
                           ? _buildMobileProductList()
@@ -201,7 +208,7 @@ class _PurchaseCreateViewState extends State<PurchaseCreateView> {
                   ),
                 ),
               ),
-              
+
               // Payment details
               Card(
                 margin: EdgeInsets.only(bottom: isSmallScreen ? 10 : 16),
@@ -212,17 +219,22 @@ class _PurchaseCreateViewState extends State<PurchaseCreateView> {
                     children: [
                       Text(
                         "Payment Details",
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        style: Theme.of(
+                          context,
+                        ).textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.bold,
                           fontSize: isSmallScreen ? 15 : 16,
                         ),
                       ),
                       SizedBox(height: isSmallScreen ? 12 : 16),
-                      
+
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text("Subtotal:", style: TextStyle(fontSize: isSmallScreen ? 13 : 14)),
+                          Text(
+                            "Subtotal:",
+                            style: TextStyle(fontSize: isSmallScreen ? 13 : 14),
+                          ),
                           Text(
                             "₹53,100.00",
                             style: TextStyle(
@@ -236,7 +248,10 @@ class _PurchaseCreateViewState extends State<PurchaseCreateView> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text("Tax Amount:", style: TextStyle(fontSize: isSmallScreen ? 13 : 14)),
+                          Text(
+                            "Tax Amount:",
+                            style: TextStyle(fontSize: isSmallScreen ? 13 : 14),
+                          ),
                           Text(
                             "₹8,100.00",
                             style: TextStyle(
@@ -269,16 +284,16 @@ class _PurchaseCreateViewState extends State<PurchaseCreateView> {
                       ),
                       SizedBox(height: isSmallScreen ? 12 : 16),
                       _buildTextField(
-                        context, 
-                        "Payment Method", 
+                        context,
+                        "Payment Method",
                         "Select payment method",
                         Iconsax.wallet,
                         isSmallScreen: isSmallScreen,
                       ),
                       SizedBox(height: isSmallScreen ? 8 : 12),
                       _buildTextField(
-                        context, 
-                        "Notes", 
+                        context,
+                        "Notes",
                         "Enter additional notes (optional)",
                         Iconsax.note,
                         isSmallScreen: isSmallScreen,
@@ -301,7 +316,7 @@ class _PurchaseCreateViewState extends State<PurchaseCreateView> {
           color: Colors.white,
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withAlpha((0.05 * 255).toInt()),
               blurRadius: 5,
               offset: Offset(0, -2),
             ),
@@ -314,12 +329,12 @@ class _PurchaseCreateViewState extends State<PurchaseCreateView> {
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                child: Text("Cancel"),
                 style: OutlinedButton.styleFrom(
                   padding: EdgeInsets.symmetric(
                     vertical: isSmallScreen ? 10 : 14,
                   ),
                 ),
+                child: Text("Cancel"),
               ),
             ),
             SizedBox(width: 12),
@@ -329,7 +344,6 @@ class _PurchaseCreateViewState extends State<PurchaseCreateView> {
                   // Save purchase and return
                   Navigator.pop(context, true);
                 },
-                child: Text("Save Purchase"),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Theme.of(context).primaryColor,
                   foregroundColor: Colors.white,
@@ -337,6 +351,7 @@ class _PurchaseCreateViewState extends State<PurchaseCreateView> {
                     vertical: isSmallScreen ? 10 : 14,
                   ),
                 ),
+                child: Text("Save Purchase"),
               ),
             ),
           ],
@@ -421,16 +436,42 @@ class _PurchaseCreateViewState extends State<PurchaseCreateView> {
             ),
             child: Row(
               children: [
-                Expanded(flex: 3, child: Text("Product", style: TextStyle(fontWeight: FontWeight.bold))),
-                Expanded(child: Text("Qty", style: TextStyle(fontWeight: FontWeight.bold))),
-                Expanded(child: Text("Rate", style: TextStyle(fontWeight: FontWeight.bold))),
-                Expanded(child: Text("Tax (%)", style: TextStyle(fontWeight: FontWeight.bold))),
-                Expanded(child: Text("Amount", style: TextStyle(fontWeight: FontWeight.bold))),
+                Expanded(
+                  flex: 3,
+                  child: Text(
+                    "Product",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+                Expanded(
+                  child: Text(
+                    "Qty",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+                Expanded(
+                  child: Text(
+                    "Rate",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+                Expanded(
+                  child: Text(
+                    "Tax (%)",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+                Expanded(
+                  child: Text(
+                    "Amount",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
                 SizedBox(width: 40),
               ],
             ),
           ),
-          
+
           // Product rows
           ...productItems.map((product) {
             return Container(
@@ -449,7 +490,10 @@ class _PurchaseCreateViewState extends State<PurchaseCreateView> {
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(4),
                         ),
-                        contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 8,
+                        ),
                       ),
                       style: TextStyle(fontSize: 14),
                     ),
@@ -462,7 +506,10 @@ class _PurchaseCreateViewState extends State<PurchaseCreateView> {
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(4),
                         ),
-                        contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 8,
+                        ),
                       ),
                       style: TextStyle(fontSize: 14),
                       keyboardType: TextInputType.number,
@@ -476,7 +523,10 @@ class _PurchaseCreateViewState extends State<PurchaseCreateView> {
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(4),
                         ),
-                        contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 8,
+                        ),
                       ),
                       style: TextStyle(fontSize: 14),
                       keyboardType: TextInputType.number,
@@ -490,7 +540,10 @@ class _PurchaseCreateViewState extends State<PurchaseCreateView> {
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(4),
                         ),
-                        contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 8,
+                        ),
                       ),
                       style: TextStyle(fontSize: 14),
                       keyboardType: TextInputType.number,
@@ -524,7 +577,7 @@ class _PurchaseCreateViewState extends State<PurchaseCreateView> {
                 ],
               ),
             );
-          }).toList(),
+          }),
         ],
       ),
     );
@@ -532,186 +585,202 @@ class _PurchaseCreateViewState extends State<PurchaseCreateView> {
 
   Widget _buildMobileProductList() {
     return Column(
-      children: productItems.map((product) {
-        return Container(
-          margin: EdgeInsets.only(bottom: 10),
-          padding: EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.grey[300]!),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Column(
-            children: [
-              Row(
+      children:
+          productItems.map((product) {
+            return Container(
+              margin: EdgeInsets.only(bottom: 10),
+              padding: EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.grey[300]!),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Column(
                 children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Product",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 12,
-                          ),
-                        ),
-                        SizedBox(height: 4),
-                        TextFormField(
-                          initialValue: product['name'],
-                          decoration: InputDecoration(
-                            hintText: "Select product",
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(4),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Product",
+                              style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 12,
+                              ),
                             ),
-                            contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-                          ),
-                          style: TextStyle(fontSize: 13),
+                            SizedBox(height: 4),
+                            TextFormField(
+                              initialValue: product['name'],
+                              decoration: InputDecoration(
+                                hintText: "Select product",
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                                contentPadding: EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                  vertical: 8,
+                                ),
+                              ),
+                              style: TextStyle(fontSize: 13),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                      SizedBox(width: 10),
+                      IconButton(
+                        onPressed: () {
+                          setState(() {
+                            productItems.remove(product);
+                          });
+                        },
+                        icon: Icon(Icons.delete_outline, color: Colors.red),
+                        iconSize: 18,
+                        padding: EdgeInsets.zero,
+                        constraints: BoxConstraints(),
+                      ),
+                    ],
                   ),
-                  SizedBox(width: 10),
-                  IconButton(
-                    onPressed: () {
-                      setState(() {
-                        productItems.remove(product);
-                      });
-                    },
-                    icon: Icon(Icons.delete_outline, color: Colors.red),
-                    iconSize: 18,
-                    padding: EdgeInsets.zero,
-                    constraints: BoxConstraints(),
+                  SizedBox(height: 8),
+                  Row(
+                    children: [
+                      // Quantity
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Qty",
+                              style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 12,
+                              ),
+                            ),
+                            SizedBox(height: 4),
+                            TextFormField(
+                              initialValue: product['qty'].toString(),
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                                contentPadding: EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                  vertical: 8,
+                                ),
+                              ),
+                              style: TextStyle(fontSize: 13),
+                              keyboardType: TextInputType.number,
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(width: 8),
+                      // Rate
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Rate",
+                              style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 12,
+                              ),
+                            ),
+                            SizedBox(height: 4),
+                            TextFormField(
+                              initialValue: product['rate'].toString(),
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                                contentPadding: EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                  vertical: 8,
+                                ),
+                              ),
+                              style: TextStyle(fontSize: 13),
+                              keyboardType: TextInputType.number,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 8),
+                  Row(
+                    children: [
+                      // Tax
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Tax (%)",
+                              style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 12,
+                              ),
+                            ),
+                            SizedBox(height: 4),
+                            TextFormField(
+                              initialValue: product['tax'].toString(),
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                                contentPadding: EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                  vertical: 8,
+                                ),
+                              ),
+                              style: TextStyle(fontSize: 13),
+                              keyboardType: TextInputType.number,
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(width: 8),
+                      // Amount
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Amount",
+                              style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 12,
+                              ),
+                            ),
+                            SizedBox(height: 4),
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 10,
+                                vertical: 9,
+                              ),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(4),
+                                border: Border.all(color: Colors.grey[300]!),
+                                color: Colors.grey[50],
+                              ),
+                              child: Text(
+                                "₹${product['amount']}",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 13,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
-              SizedBox(height: 8),
-              Row(
-                children: [
-                  // Quantity
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Qty",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 12,
-                          ),
-                        ),
-                        SizedBox(height: 4),
-                        TextFormField(
-                          initialValue: product['qty'].toString(),
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(4),
-                            ),
-                            contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-                          ),
-                          style: TextStyle(fontSize: 13),
-                          keyboardType: TextInputType.number,
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(width: 8),
-                  // Rate
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Rate",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 12,
-                          ),
-                        ),
-                        SizedBox(height: 4),
-                        TextFormField(
-                          initialValue: product['rate'].toString(),
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(4),
-                            ),
-                            contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-                          ),
-                          style: TextStyle(fontSize: 13),
-                          keyboardType: TextInputType.number,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 8),
-              Row(
-                children: [
-                  // Tax
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Tax (%)",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 12,
-                          ),
-                        ),
-                        SizedBox(height: 4),
-                        TextFormField(
-                          initialValue: product['tax'].toString(),
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(4),
-                            ),
-                            contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-                          ),
-                          style: TextStyle(fontSize: 13),
-                          keyboardType: TextInputType.number,
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(width: 8),
-                  // Amount
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Amount",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 12,
-                          ),
-                        ),
-                        SizedBox(height: 4),
-                        Container(
-                          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 9),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(4),
-                            border: Border.all(color: Colors.grey[300]!),
-                            color: Colors.grey[50],
-                          ),
-                          child: Text(
-                            "₹${product['amount']}",
-                            style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 13,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        );
-      }).toList(),
+            );
+          }).toList(),
     );
   }
 }

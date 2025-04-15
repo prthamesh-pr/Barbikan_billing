@@ -37,13 +37,15 @@ class _DashboardViewState extends State<DashboardView> {
         double textScaleFactor = constraints.maxWidth / 1400;
         // Clamp the scale factor to prevent too small or too large text
         textScaleFactor = textScaleFactor.clamp(0.7, 1.2);
-        
+
         // Determine if we're on a small screen (mobile)
         bool isSmallScreen = constraints.maxWidth < 800;
-        
+
         return MediaQuery(
           // Override the default text scaling to use our responsive scaling
-          data: MediaQuery.of(context).copyWith(textScaleFactor: textScaleFactor),
+          data: MediaQuery.of(
+            context,
+          ).copyWith(textScaler: TextScaler.linear(textScaleFactor)),
           child: ListView(
             padding: const EdgeInsets.all(15),
             children: [
@@ -51,12 +53,12 @@ class _DashboardViewState extends State<DashboardView> {
                 alignment: Alignment.centerLeft,
                 fit: BoxFit.scaleDown,
                 child: Text(
-                  "Dashboard", 
-                  style: Theme.of(context).textTheme.headlineSmall
+                  "Dashboard",
+                  style: Theme.of(context).textTheme.headlineSmall,
                 ),
               ),
               const SizedBox(height: 15),
-              
+
               // Responsive layout based on screen width
               if (isSmallScreen)
                 _buildMobileLayout(constraints)
@@ -65,7 +67,7 @@ class _DashboardViewState extends State<DashboardView> {
             ],
           ),
         );
-      }
+      },
     );
   }
 
@@ -73,7 +75,7 @@ class _DashboardViewState extends State<DashboardView> {
   Widget _buildMobileLayout(BoxConstraints constraints) {
     // Calculate dynamic aspect ratio for smaller screens
     double cardAspectRatio = constraints.maxWidth < 600 ? (1 / 0.6) : (1 / 0.5);
-    
+
     return Column(
       children: [
         // First row: Sales and Purchase
@@ -104,9 +106,9 @@ class _DashboardViewState extends State<DashboardView> {
             ),
           ],
         ),
-        
+
         const SizedBox(height: 10),
-        
+
         // Second row: Today Sales and Products
         GridView(
           primary: false,
@@ -135,9 +137,9 @@ class _DashboardViewState extends State<DashboardView> {
             ),
           ],
         ),
-        
+
         const SizedBox(height: 10),
-        
+
         // Low Stock Products below
         Container(
           width: double.infinity,
@@ -153,87 +155,93 @@ class _DashboardViewState extends State<DashboardView> {
                   fit: BoxFit.scaleDown,
                   child: Text(
                     "Low Stock Products",
-                    style: Theme.of(context).textTheme.bodyLarge!
-                        .copyWith(fontWeight: FontWeight.bold),
+                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ),
               SizedBox(
                 width: double.infinity,
-                  child: DataTable(
-                    columnSpacing: 10.0,
-                    dataRowMinHeight: constraints.maxWidth < 600 ? 40 : 48,
-                    dataRowMaxHeight: constraints.maxWidth < 600 ? 50 : 60,
-                    columns: [
-                      DataColumn(
-                        label: SizedBox(
-                          width: 130,
-                          child: FittedBox(
-                            fit: BoxFit.scaleDown,
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              'Product Name',
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
+                child: DataTable(
+                  columnSpacing: 10.0,
+                  dataRowMinHeight: constraints.maxWidth < 600 ? 40 : 48,
+                  dataRowMaxHeight: constraints.maxWidth < 600 ? 50 : 60,
+                  columns: [
+                    DataColumn(
+                      label: SizedBox(
+                        width: 130,
+                        child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            'Product Name',
+                            style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                         ),
                       ),
-                      DataColumn(
-                        label: SizedBox(
-                          width: 90,
-                          child: FittedBox(
-                            fit: BoxFit.scaleDown,
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              'Current Stock',
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
+                    ),
+                    DataColumn(
+                      label: SizedBox(
+                        width: 90,
+                        child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            'Current Stock',
+                            style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                         ),
                       ),
-                      DataColumn(
-                        label: SizedBox(
-                          width: 100,
-                          child: FittedBox(
-                            fit: BoxFit.scaleDown,
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              'Minimum Stock',
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
+                    ),
+                    DataColumn(
+                      label: SizedBox(
+                        width: 100,
+                        child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            'Minimum Stock',
+                            style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                         ),
                       ),
-                    ],
-                    rows: products.map((product) {
-                      return DataRow(
-                        cells: [
-                          DataCell(
-                            FittedBox(
-                              fit: BoxFit.scaleDown,
-                              alignment: Alignment.centerLeft,
-                              child: Text(product['product_name']),
+                    ),
+                  ],
+                  rows:
+                      products.map((product) {
+                        return DataRow(
+                          cells: [
+                            DataCell(
+                              FittedBox(
+                                fit: BoxFit.scaleDown,
+                                alignment: Alignment.centerLeft,
+                                child: Text(product['product_name']),
+                              ),
                             ),
-                          ),
-                          DataCell(
-                            FittedBox(
-                              fit: BoxFit.scaleDown,
-                              alignment: Alignment.centerLeft,
-                              child: Text(product['current_stock'].toString()),
+                            DataCell(
+                              FittedBox(
+                                fit: BoxFit.scaleDown,
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  product['current_stock'].toString(),
+                                ),
+                              ),
                             ),
-                          ),
-                          DataCell(
-                            FittedBox(
-                              fit: BoxFit.scaleDown,
-                              alignment: Alignment.centerLeft,
-                              child: Text(product['minimum_stock'].toString()),
+                            DataCell(
+                              FittedBox(
+                                fit: BoxFit.scaleDown,
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  product['minimum_stock'].toString(),
+                                ),
+                              ),
                             ),
-                          ),
-                        ],
-                      );
-                    }).toList(),
-                  ),
-              ),  
+                          ],
+                        );
+                      }).toList(),
+                ),
+              ),
             ],
           ),
         ),
@@ -306,8 +314,9 @@ class _DashboardViewState extends State<DashboardView> {
                       fit: BoxFit.scaleDown,
                       child: Text(
                         "Low Stock Products",
-                        style: Theme.of(context).textTheme.bodyLarge!
-                            .copyWith(fontWeight: FontWeight.bold),
+                        style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),
@@ -356,33 +365,38 @@ class _DashboardViewState extends State<DashboardView> {
                           ),
                         ),
                       ],
-                      rows: products.map((product) {
-                        return DataRow(
-                          cells: [
-                            DataCell(
-                              FittedBox(
-                                fit: BoxFit.scaleDown,
-                                alignment: Alignment.centerLeft,
-                                child: Text(product['product_name']),
-                              ),
-                            ),
-                            DataCell(
-                              FittedBox(
-                                fit: BoxFit.scaleDown,
-                                alignment: Alignment.centerLeft,
-                                child: Text(product['current_stock'].toString()),
-                              ),
-                            ),
-                            DataCell(
-                              FittedBox(
-                                fit: BoxFit.scaleDown,
-                                alignment: Alignment.centerLeft,
-                                child: Text(product['minimum_stock'].toString()),
-                              ),
-                            ),
-                          ],
-                        );
-                      }).toList(),
+                      rows:
+                          products.map((product) {
+                            return DataRow(
+                              cells: [
+                                DataCell(
+                                  FittedBox(
+                                    fit: BoxFit.scaleDown,
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(product['product_name']),
+                                  ),
+                                ),
+                                DataCell(
+                                  FittedBox(
+                                    fit: BoxFit.scaleDown,
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      product['current_stock'].toString(),
+                                    ),
+                                  ),
+                                ),
+                                DataCell(
+                                  FittedBox(
+                                    fit: BoxFit.scaleDown,
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      product['minimum_stock'].toString(),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            );
+                          }).toList(),
                     ),
                   ),
                 ],
@@ -404,19 +418,31 @@ class _DashboardViewState extends State<DashboardView> {
     // Dynamic card sizing based on screen width
     double cardPadding = constraints.maxWidth < 600 ? 8.0 : 10.0;
     double spacingHeight = constraints.maxWidth < 600 ? 3.0 : 5.0;
-    
+
     // Calculate responsive font sizes
-    double titleSize = constraints.maxWidth < 600 ? 14.0 : 
-                      constraints.maxWidth < 800 ? 16.0 : 18.0;
-    double valueSize = constraints.maxWidth < 600 ? 18.0 : 
-                      constraints.maxWidth < 800 ? 22.0 : 28.0;
-    double footerSize = constraints.maxWidth < 600 ? 10.0 : 
-                      constraints.maxWidth < 800 ? 12.0 : 14.0;
+    double titleSize =
+        constraints.maxWidth < 600
+            ? 14.0
+            : constraints.maxWidth < 800
+            ? 16.0
+            : 18.0;
+    double valueSize =
+        constraints.maxWidth < 600
+            ? 18.0
+            : constraints.maxWidth < 800
+            ? 22.0
+            : 28.0;
+    double footerSize =
+        constraints.maxWidth < 600
+            ? 10.0
+            : constraints.maxWidth < 800
+            ? 12.0
+            : 14.0;
 
     return Container(
       padding: EdgeInsets.all(cardPadding),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.2),
+        color: color.withAlpha((0.2 * 255).toInt()),
         borderRadius: BorderRadius.circular(10),
       ),
       child: Column(
