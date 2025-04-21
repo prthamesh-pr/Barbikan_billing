@@ -1,9 +1,20 @@
+import 'package:billing_web/view/Forgot_password/viewModel/RecoveryPassword_Provider.dart';
+import 'package:billing_web/view/Log_In/login_provider.dart';
+import 'package:billing_web/view/Log_In/login_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'view/landing_view.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+      MultiProvider(
+          providers: [
+            ChangeNotifierProvider(create: (context) => LoginProvider()),
+            ChangeNotifierProvider(create: (context) => RecoveryPasswordProvider()),
+          //  ChangeNotifierProvider(create: (context) => FirstScreenProvider()),
+          ],
+          child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -22,7 +33,7 @@ class MyApp extends StatelessWidget {
           seedColor: Color(0xffb23b3b),
         ),
       ),
-      home: const LandingView(),
+      home: const LoginScreen(),
     );
   }
 }

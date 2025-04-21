@@ -132,7 +132,7 @@ class _CompanyListViewState extends State<CompanyListView> {
           Icon(Icons.add, color: Colors.white, size: 20),
           const SizedBox(width: 10),
           Text(
-            "Add New Company",
+            "Add New Company4567890ertyjk",
             style: Theme.of(context).textTheme.labelLarge!.copyWith(color: Colors.white),
           ),
         ],
@@ -143,7 +143,7 @@ class _CompanyListViewState extends State<CompanyListView> {
   Widget _buildDataTable(BuildContext context, bool isTablet) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+       // color: Colors.red,
         borderRadius: BorderRadius.circular(10),
       ),
       width: double.infinity,
