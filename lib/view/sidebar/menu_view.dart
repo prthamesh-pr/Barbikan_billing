@@ -71,6 +71,7 @@ class _MenuViewState extends State<MenuView> {
                   widget.model.title?.toString() ?? "",
                 );
               });
+              Navigator.of(context).pop();
             } else {
               tmpOpen = !tmpOpen;
               setState(() {});
@@ -135,6 +136,7 @@ class _MenuViewState extends State<MenuView> {
                           element.title?.toString() ?? "",
                         );
                       });
+                      Navigator.of(context).pop();
                     },
                     child: Container(
                       padding: const EdgeInsets.only(left: 15, right: 10),

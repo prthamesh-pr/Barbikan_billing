@@ -132,7 +132,7 @@ class _CompanyListViewState extends State<CompanyListView> {
           Icon(Icons.add, color: Colors.white, size: 20),
           const SizedBox(width: 10),
           Text(
-            "Add New Company4567890ertyjk",
+            "Add New Company",
             style: Theme.of(context).textTheme.labelLarge!.copyWith(color: Colors.white),
           ),
         ],

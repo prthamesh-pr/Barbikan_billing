@@ -32,19 +32,40 @@ class LoginProvider extends ChangeNotifier{
   }
 
 
-  void validEmail(String value) {
-    String pattern = r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$';
-    RegExp regex = RegExp(pattern);
-
+  void validateEmailOrPhone(String value) {
     if (value.isEmpty) {
-      emailError = "Email is required";
-    } else if (!regex.hasMatch(value)) {
-      emailError = "Enter a valid email address";
+      emailError = "Email or Mobile Number is required";
+    } else if (_looksLikeEmail(value)) {
+      if (!_isValidEmail(value)) {
+        emailError = "Please enter a valid email address";
+      } else {
+        emailError = null;
+      }
+    } else if (_looksLikePhone(value)) {
+      if (!_isValidPhone(value)) {
+        emailError = "Please enter a valid mobile number";
+      } else {
+        emailError = null;
+      }
     } else {
-      emailError = null;
+      emailError = "Enter a valid email or mobile number";
     }
+
     notifyListeners();
   }
 
+  bool _isValidEmail(value) {
+    return RegExp(r"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$").hasMatch(value);
+  }
+  bool _isValidPhone(value) {
+    return value.length == 10 && RegExp(r'^\d{10}$').hasMatch(value);
+  }
 
+  bool _looksLikeEmail(String value) {
+    return value.contains('@');
+  }
+
+  bool _looksLikePhone(String value) {
+    return RegExp(r'^\d+$').hasMatch(value); // just digits
+  }
 }

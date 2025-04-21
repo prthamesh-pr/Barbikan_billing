@@ -55,11 +55,12 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: TextField(
                           controller: model.emailController,
                           decoration: InputDecoration(
+                            hintText: 'Enter Email or Phone Number',
                             prefixIcon:Icon(Icons.email),
                             errorText: model.emailError,
                           ),
                           onChanged: (value) {
-                            model.validEmail(value);
+                            model.validateEmailOrPhone(value);
                           },
                         ),
                       ),
