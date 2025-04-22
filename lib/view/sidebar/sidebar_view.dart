@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
-import '../Log_In/login_screen.dart';
+import '../Log_In/view/login_screen.dart';
 import 'menu_view.dart';
 
 class SideBarView extends StatefulWidget {
@@ -126,6 +126,7 @@ class _SideBarViewState extends State<SideBarView> {
                     showDialog(
                       context: context,
                       builder: (context) => AlertDialog(
+                        backgroundColor: Colors.red,
                         title: Text('Confirm Logout'),
                         content: SizedBox(
                           width: 300,

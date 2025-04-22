@@ -1,6 +1,6 @@
 import 'package:billing_web/view/Forgot_password/viewModel/RecoveryPassword_Provider.dart';
-import 'package:billing_web/view/Log_In/login_provider.dart';
-import 'package:billing_web/view/Log_In/login_screen.dart';
+import 'package:billing_web/view/Log_In/viewModel/login_provider.dart';
+import 'package:billing_web/view/Log_In/view/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
