@@ -4,7 +4,12 @@ class LoginCredentialModel {
   String? message;
   bool? success;
 
-  LoginCredentialModel({this.statusCode, this.data, this.message, this.success});
+  LoginCredentialModel({
+    this.statusCode,
+    this.data,
+    this.message,
+    this.success,
+  });
 
   factory LoginCredentialModel.fromJson(Map<String, dynamic> json) {
     return LoginCredentialModel(
@@ -17,16 +22,15 @@ class LoginCredentialModel {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = {};
-    data['statusCode'] = this.statusCode;
+    data['statusCode'] = statusCode;
     if (this.data != null) {
       data['data'] = this.data!.toJson();
     }
-    data['message'] = this.message;
-    data['success'] = this.success;
+    data['message'] = message;
+    data['success'] = success;
     return data;
   }
 }
-
 
 class Data {
   String? token;
@@ -43,9 +47,9 @@ class Data {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = {};
-    data['token'] = this.token;
-    if (this.user != null) {
-      data['user'] = this.user!.toJson();
+    data['token'] = token;
+    if (user != null) {
+      data['user'] = user!.toJson();
     }
     return data;
   }
@@ -68,13 +72,9 @@ class User {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = {};
-    data['id'] = this.id;
-    data['username'] = this.username;
-    data['account_type'] = this.accountType;
+    data['id'] = id;
+    data['username'] = username;
+    data['account_type'] = accountType;
     return data;
   }
 }
-
-
-
-

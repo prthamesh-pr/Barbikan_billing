@@ -1,30 +1,26 @@
 import 'dart:convert';
 
-
-import 'package:flutter/cupertino.dart';
+import 'package:billing_web/features/utils/api_Utils.dart';
+import 'package:billing_web/features/utils/api_url.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import '../../landing_view.dart';
-import '../../utils/api_Utils.dart';
-import '../../utils/api_url.dart';
 import '../model/loginCredential.dart';
-import '../view/login_screen.dart';
 
-class LoginProvider extends ChangeNotifier{
-
+class LoginProvider extends ChangeNotifier {
   TextEditingController emailController = TextEditingController();
   TextEditingController passController = TextEditingController();
 
-
-  String img = 'https://images.pexels.com/photos/674010/pexels-photo-674010.jpeg';
-  String google= 'https://img.freepik.com/premium-vector/google-logo-icon-set-google-icon-searching-icons-vector_981536-454.jpg?w=1060';
-
+  String img =
+      'https://images.pexels.com/photos/674010/pexels-photo-674010.jpeg';
+  String google =
+      'https://img.freepik.com/premium-vector/google-logo-icon-set-google-icon-searching-icons-vector_981536-454.jpg?w=1060';
 
   bool isPasswordVisible = false;
 
   LoginCredentialModel? loginCredential;
   String? errorMessage;
-
 
   void PasswordVisibility() {
     isPasswordVisible = !isPasswordVisible;
@@ -44,7 +40,6 @@ class LoginProvider extends ChangeNotifier{
     }
     notifyListeners();
   }
-
 
   void validateEmailOrPhone(String value) {
     if (value.isEmpty) {
@@ -89,18 +84,16 @@ class LoginProvider extends ChangeNotifier{
     notifyListeners();
   }
 
-
-
-  initState(context)  async {
-    SharedPreferences prefs =  await SharedPreferences.getInstance();
+  initState(context) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     bool? isLogin = prefs.getBool('isLogin');
-    if(isLogin==true){
-      Navigator.push(context,
+    if (isLogin == true) {
+      Navigator.push(
+        context,
         MaterialPageRoute(builder: (context) => LandingView()),
       );
     }
   }
-
 
   Future<void> loggedIn({
     Function? success,
@@ -115,7 +108,7 @@ class LoginProvider extends ChangeNotifier{
     await ApiUtil.postApiWithBody(
       url: ApiUrl.login,
       body: jsonEncode(body),
-      success: (response)async {
+      success: (response) async {
         var json = jsonDecode(response);
         var loginData = LoginCredentialModel.fromJson(json);
 
@@ -127,7 +120,6 @@ class LoginProvider extends ChangeNotifier{
             SharedPreferences prefs = await SharedPreferences.getInstance();
             await prefs.setString('jwt_token', token);
             await prefs.setBool('isLogin', true);
-
           }
           loginCredential = loginData;
           errorMessage = null; // clear old errors
@@ -144,13 +136,11 @@ class LoginProvider extends ChangeNotifier{
       failure: (message) {
         errorMessage = message ?? 'Something went wrong';
         notifyListeners();
-          print("API failure triggered with message: $message");
+        print("API failure triggered with message: $message");
 
         if (failure != null) failure(message);
       },
       context: context,
-
     );
   }
-
 }

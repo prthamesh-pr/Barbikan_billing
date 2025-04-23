@@ -1,9 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../forgotPassword_screen.dart';
-
-class RecoveryPasswordProvider extends ChangeNotifier{
+class RecoveryPasswordProvider extends ChangeNotifier {
   TextEditingController recoveryEmailController = TextEditingController();
   String? recoveryEmailError;
 
@@ -23,5 +21,4 @@ class RecoveryPasswordProvider extends ChangeNotifier{
     notifyListeners();
     return recoveryEmailError == null;
   }
-
 }

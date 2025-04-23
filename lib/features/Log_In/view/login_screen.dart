@@ -14,15 +14,12 @@ class  LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> with OnInit {
-
-
   @override
   Widget build(BuildContext context) {
-
-    return MediaQuery.of(context).size.width<600 ?
-      Scaffold(
-        body: Consumer<LoginProvider>(
-            builder: (context , model , child) {
+    return MediaQuery.of(context).size.width < 600
+        ? Scaffold(
+          body: Consumer<LoginProvider>(
+            builder: (context, model, child) {
               // if (model == null) return Center(child: Text('Loading...'));
               return SingleChildScrollView(
                 child: ConstrainedBox(
@@ -45,8 +42,14 @@ class _LoginScreenState extends State<LoginScreen> with OnInit {
                             ),
                           ],
                         ),
-                        Text('Adhicine',style: TextStyle(color: Colors.blueAccent,
-                            fontWeight: FontWeight.bold,fontSize: 15),),
+                        Text(
+                          'Adhicine',
+                          style: TextStyle(
+                            color: Colors.blueAccent,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                          ),
+                        ),
                         SizedBox(height: 40),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -54,7 +57,10 @@ class _LoginScreenState extends State<LoginScreen> with OnInit {
                             alignment: Alignment.centerLeft,
                             child: Text(
                               "Sign In",
-                              style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                              style: TextStyle(
+                                fontSize: 30,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                         ),
@@ -65,19 +71,20 @@ class _LoginScreenState extends State<LoginScreen> with OnInit {
                             controller: model.emailController,
                             decoration: InputDecoration(
                               hintText: 'Enter Email or Phone Number',
-                              prefixIcon:Icon(Icons.email),
+                              prefixIcon: Icon(Icons.email),
                               errorText: model.emailError,
                             ),
-                              inputFormatters: [
-                                //FilteringTextInputFormatter.digitsOnly,
-                                LengthLimitingTextInputFormatter(10),
-                              ],
+                            inputFormatters: [
+                              //FilteringTextInputFormatter.digitsOnly,
+                              LengthLimitingTextInputFormatter(10),
+                            ],
                             onChanged: (value) {
                               if (value.length == 10) {
-                                FocusScope.of(context).unfocus();};
+                                FocusScope.of(context).unfocus();
+                              }
                               model.clearErrorMessage();
                               model.validateEmailOrPhone(value);
-                            }
+                            },
                           ),
                         ),
                         SizedBox(height: 10),
@@ -97,27 +104,32 @@ class _LoginScreenState extends State<LoginScreen> with OnInit {
                                 ),
                                 onPressed: () {
                                   model.PasswordVisibility();
-                                }),
-                    
+                                },
+                              ),
+
                               errorText: model.passwordError,
                             ),
                             onChanged: (value) {
                               model.clearErrorMessage();
                               model.validatePassword(value);
-
                             },
-
                           ),
-
                         ),
                         Align(
                           alignment: Alignment.centerRight,
                           child: TextButton(
                             onPressed: () {
                               Navigator.of(context).pushReplacement(
-                                  MaterialPageRoute(builder: (context) => RecoverypasswordScreen()));
+                                MaterialPageRoute(
+                                  builder:
+                                      (context) => RecoverypasswordScreen(),
+                                ),
+                              );
                             },
-                            child: Text("Forgot Password?", style: TextStyle(color: Colors.blueAccent)),
+                            child: Text(
+                              "Forgot Password?",
+                              style: TextStyle(color: Colors.blueAccent),
+                            ),
                           ),
                         ),
                         SizedBox(height: 20),
@@ -130,41 +142,50 @@ class _LoginScreenState extends State<LoginScreen> with OnInit {
                                 success: () {
                                   Navigator.push(
                                     context,
-                                    MaterialPageRoute(builder: (context) => LandingView()),
+                                    MaterialPageRoute(
+                                      builder: (context) => LandingView(),
+                                    ),
                                   );
                                 },
                                 failure: (error) {
-                                  print("Error Message12345======: ${model.errorMessage}");
+                                  print(
+                                    "Error Message12345======: ${model.errorMessage}",
+                                  );
                                   showDialog(
                                     context: context,
                                     builder: (BuildContext context) {
                                       return AlertDialog(
-                                       // title: Text("Login Failed"),
+                                        // title: Text("Login Failed"),
                                         content: Text(model.errorMessage!),
                                         actions: [
                                           TextButton(
                                             child: Text("OK"),
                                             onPressed: () {
-                                              Navigator.of(context).pop(); // dismiss dialog
+                                              Navigator.of(
+                                                context,
+                                              ).pop(); // dismiss dialog
                                             },
                                           ),
                                         ],
                                       );
                                     },
                                   );
-
                                 },
-
                               );
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.blueAccent,
                               minimumSize: Size(double.infinity, 50),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15),
+                              ),
                             ),
                             child: Text(
                               "Log In",
-                              style: TextStyle(color: Colors.white, fontSize: 16),
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                              ),
                             ),
                           ),
                         ),
@@ -176,7 +197,7 @@ class _LoginScreenState extends State<LoginScreen> with OnInit {
                               style: TextStyle(color: Colors.red, fontSize: 14),
                             ),
                           ),
-                    
+
                         SizedBox(height: 20),
                         Row(
                           children: [
@@ -197,20 +218,28 @@ class _LoginScreenState extends State<LoginScreen> with OnInit {
                               backgroundColor: Colors.white,
                               side: BorderSide(color: Colors.grey.shade300),
                               minimumSize: Size(double.infinity, 50),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15),
+                              ),
                             ),
-                            icon: Image.network(model.google,height: 24),
-                            label: Text("Continue with Google", style: TextStyle(color: Colors.black)),
+                            icon: Image.network(model.google, height: 24),
+                            label: Text(
+                              "Continue with Google",
+                              style: TextStyle(color: Colors.black),
+                            ),
                           ),
                         ),
-                      SizedBox(height: 20),
+                        SizedBox(height: 20),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text("New to Adhicine?"),
                             TextButton(
                               onPressed: () {},
-                              child: Text("Sign Up", style: TextStyle(color: Colors.blueAccent)),
+                              child: Text(
+                                "Sign Up",
+                                style: TextStyle(color: Colors.blueAccent),
+                              ),
                             ),
                           ],
                         ),
@@ -220,17 +249,15 @@ class _LoginScreenState extends State<LoginScreen> with OnInit {
                   ),
                 ),
               );
-            }
+            },
+          ),
         )
-    ):Container();
-
-
-
+        : Container();
   }
 
   @override
   void afterFirstLayout(BuildContext context) {
     // TODO: implement afterFirstLayout
-    Provider.of<LoginProvider>(context,listen: false).initState(context);
+    Provider.of<LoginProvider>(context, listen: false).initState(context);
   }
 }

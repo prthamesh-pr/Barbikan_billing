@@ -6,8 +6,8 @@ import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
 
 import '../../utils/Strings.dart';
-class EditUserView extends StatefulWidget {
 
+class EditUserView extends StatefulWidget {
   final UserAndAccessModel? user;
   const EditUserView({super.key, this.user});
 
@@ -38,27 +38,32 @@ class _EditUserViewState extends State<EditUserView> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Expanded(
-
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                         // SizedBox(height: 30),
+                          // SizedBox(height: 30),
                           SafeArea(
                             child: FittedBox(
                               fit: BoxFit.scaleDown,
                               alignment: Alignment.centerLeft,
                               child: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                                child: Text(Strings.update,
-                                  style: Theme.of(context).textTheme.headlineSmall,
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8.0,
+                                ),
+                                child: Text(
+                                  Strings.update,
+                                  style:
+                                      Theme.of(context).textTheme.headlineSmall,
                                 ),
                               ),
                             ),
                           ),
                           const SizedBox(height: 4),
                           Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8.0,
+                            ),
                             child: Text(
                               Strings.orgTeam,
                               style: Theme.of(context).textTheme.labelMedium,
@@ -94,13 +99,13 @@ class _EditUserViewState extends State<EditUserView> {
                 child: LayoutBuilder(
                   builder: (context, constraints) {
                     // Calculate adaptive spacing
-                    final verticalSpacing = (constraints.maxHeight * 0.02).clamp(
-                      10.0,
-                      20.0,
-                    );
+                    final verticalSpacing = (constraints.maxHeight * 0.02)
+                        .clamp(10.0, 20.0);
 
                     return ListView(
-                      padding: EdgeInsets.all(constraints.maxWidth * 0.03).clamp(
+                      padding: EdgeInsets.all(
+                        constraints.maxWidth * 0.03,
+                      ).clamp(
                         const EdgeInsets.all(10.0),
                         const EdgeInsets.all(20.0),
                       ),
@@ -165,7 +170,7 @@ class _EditUserViewState extends State<EditUserView> {
                               label: "Account Type",
                               icon: Iconsax.profile_2user,
                               hint: "Choose Account Type",
-                             // controller.usernameController,
+                              // controller.usernameController,
                             ),
                             if (!isSmallScreen) const Spacer(),
                           ],
@@ -208,9 +213,10 @@ class _EditUserViewState extends State<EditUserView> {
                       label: "Update",
                       onTap: () {
                         Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => UserAndAccessView(),
-                            ));
+                          MaterialPageRoute(
+                            builder: (context) => UserAndAccessView(),
+                          ),
+                        );
                       },
                     ),
                   ],
@@ -219,35 +225,35 @@ class _EditUserViewState extends State<EditUserView> {
             ],
           ),
         );
-      }
+      },
     );
   }
 
   // Helper method to build form rows that adapt to screen size
   Widget _buildFormRow(
-      BuildContext context, {
-        required bool isSmallScreen,
-        required List<Widget> fields,
-      }) {
+    BuildContext context, {
+    required bool isSmallScreen,
+    required List<Widget> fields,
+  }) {
     return isSmallScreen
         ? Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        for (int i = 0; i < fields.length; i++) ...[
-          if (i > 0) const SizedBox(height: 15),
-          fields[i],
-        ],
-      ],
-    )
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            for (int i = 0; i < fields.length; i++) ...[
+              if (i > 0) const SizedBox(height: 15),
+              fields[i],
+            ],
+          ],
+        )
         : Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        for (int i = 0; i < fields.length; i++) ...[
-          if (i > 0) const SizedBox(width: 15),
-          Expanded(child: fields[i]),
-        ],
-      ],
-    );
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            for (int i = 0; i < fields.length; i++) ...[
+              if (i > 0) const SizedBox(width: 15),
+              Expanded(child: fields[i]),
+            ],
+          ],
+        );
   }
 
   // Helper method to build consistent form fields
@@ -345,9 +351,9 @@ class _EditUserViewState extends State<EditUserView> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5),
           color:
-          isOutlined
-              ? const Color(0xffEEEEEE)
-              : Theme.of(context).primaryColor,
+              isOutlined
+                  ? const Color(0xffEEEEEE)
+                  : Theme.of(context).primaryColor,
         ),
         child: Text(
           label,

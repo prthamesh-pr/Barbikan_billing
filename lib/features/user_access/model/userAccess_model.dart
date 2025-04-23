@@ -1,6 +1,6 @@
 class UserAndAccessModel {
   int? statusCode;
-  dynamic data;  // This will hold the users data
+  dynamic data; // This will hold the users data
   String? message; // Now a simple string
   bool? success;
 
@@ -8,17 +8,17 @@ class UserAndAccessModel {
 
   UserAndAccessModel.fromJson(Map<String, dynamic> json) {
     statusCode = json['statusCode'];
-    data = json['data'];  // This will contain the users array
-    message = json['message'];  // This is now a string
+    data = json['data']; // This will contain the users array
+    message = json['message']; // This is now a string
     success = json['success'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
-    data['statusCode'] = this.statusCode;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['statusCode'] = statusCode;
     data['data'] = this.data;
-    data['message'] = this.message;
-    data['success'] = this.success;
+    data['message'] = message;
+    data['success'] = success;
     return data;
   }
 }
@@ -53,14 +53,14 @@ class Message {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
-    data['id'] = this.id;
-    data['username'] = this.username;
-    data['mobile_number'] = this.mobileNumber;
-    data['password'] = this.password;
-    data['account_type'] = this.accountType;
-    data['createdAt'] = this.createdAt;
-    data['updatedAt'] = this.updatedAt;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['username'] = username;
+    data['mobile_number'] = mobileNumber;
+    data['password'] = password;
+    data['account_type'] = accountType;
+    data['createdAt'] = createdAt;
+    data['updatedAt'] = updatedAt;
     return data;
   }
 }

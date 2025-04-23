@@ -1,7 +1,7 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Pref {
-  static final Pref singleton = new Pref._internal();
+  static final Pref singleton = Pref._internal();
   static SharedPreferences? sharedPref;
 
   factory Pref() {
@@ -57,8 +57,10 @@ class Pref {
   }
 
   // get string list
-  static List<String> getStringList(String key,
-      {List<String> defValue = const []}) {
+  static List<String> getStringList(
+    String key, {
+    List<String> defValue = const [],
+  }) {
     return sharedPref!.getStringList(key) ?? defValue;
   }
 

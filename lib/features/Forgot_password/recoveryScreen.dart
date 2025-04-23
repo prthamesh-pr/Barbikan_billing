@@ -1,7 +1,6 @@
 import 'package:billing_web/features/Forgot_password/forgotPassword_screen.dart';
 import 'package:billing_web/features/Forgot_password/viewModel/RecoveryPassword_Provider.dart';
 import 'package:billing_web/features//Log_In/view/login_screen.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -26,28 +25,32 @@ class _RecoverypasswordScreenState extends State<RecoverypasswordScreen> {
       ),
 
       body: Consumer<RecoveryPasswordProvider>(
-        builder: (context,model,child) {
+        builder: (context, model, child) {
           return Column(
-           // mainAxisAlignment: MainAxisAlignment.center,
-           // crossAxisAlignment: CrossAxisAlignment.center,
+            // mainAxisAlignment: MainAxisAlignment.center,
+            // crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(height: 50),
-             Text('Recovery Password',style: TextStyle(fontSize: 20),),
-              SizedBox(height: 50,),
+              Text('Recovery Password', style: TextStyle(fontSize: 20)),
+              SizedBox(height: 50),
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 20,horizontal: 20),
+                padding: const EdgeInsets.symmetric(
+                  vertical: 20,
+                  horizontal: 20,
+                ),
                 child: Container(
                   height: 50,
                   width: double.infinity,
                   decoration: BoxDecoration(
                     color: Colors.transparent,
                     borderRadius: BorderRadius.circular(15),
-                    border: Border.all(color: Colors.grey,width: 2)
+                    border: Border.all(color: Colors.grey, width: 2),
                   ),
                   child: TextField(
                     controller: model.recoveryEmailController,
                     onChanged: (value) {
-                      model.validateRecoveryEmail(); // Trigger validation on every change
+                      model
+                          .validateRecoveryEmail(); // Trigger validation on every change
                     },
                     decoration: InputDecoration(
                       hintText: 'Enter Your Email',
@@ -55,25 +58,31 @@ class _RecoverypasswordScreenState extends State<RecoverypasswordScreen> {
                       errorText: model.recoveryEmailError,
                       contentPadding: EdgeInsets.symmetric(horizontal: 12),
                     ),
-
                   ),
                 ),
               ),
               SizedBox(height: 20),
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 20,horizontal: 20),
+                padding: const EdgeInsets.symmetric(
+                  vertical: 20,
+                  horizontal: 20,
+                ),
                 child: GestureDetector(
-                  onTap: (){
+                  onTap: () {
                     bool isValid = model.validateRecoveryEmail();
                     if (isValid) {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => ForgotPasswordScreen()),
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ForgotPasswordScreen(),
+                        ),
                       );
-                    }else {
+                    } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text("Please enter your email")),
                       );
                     }
-                  //  Navigator.push(context, MaterialPageRoute(builder: (context) => ForgotPasswordScreen()),);
+                    //  Navigator.push(context, MaterialPageRoute(builder: (context) => ForgotPasswordScreen()),);
                   },
                   child: Container(
                     height: 50,
@@ -81,9 +90,18 @@ class _RecoverypasswordScreenState extends State<RecoverypasswordScreen> {
                     decoration: BoxDecoration(
                       color: Colors.green,
                       borderRadius: BorderRadius.circular(15),
-                        border: Border.all(color: Colors.grey,width: 2)
+                      border: Border.all(color: Colors.grey, width: 2),
                     ),
-                    child: Center(child: Text('Send Email',style: TextStyle(color: Colors.white,fontSize: 20,fontWeight: FontWeight.bold),)),
+                    child: Center(
+                      child: Text(
+                        'Send Email',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -93,16 +111,26 @@ class _RecoverypasswordScreenState extends State<RecoverypasswordScreen> {
                 children: [
                   Text('Already have Account ? '),
                   GestureDetector(
-                      onTap: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen()),);
-                      },
-                      child: Text('Log In',style: TextStyle(color: Colors.green,fontSize: 15,fontWeight: FontWeight.bold),))
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => LoginScreen()),
+                      );
+                    },
+                    child: Text(
+                      'Log In',
+                      style: TextStyle(
+                        color: Colors.green,
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
                 ],
-              )
-
+              ),
             ],
           );
-        }
+        },
       ),
     );
   }
