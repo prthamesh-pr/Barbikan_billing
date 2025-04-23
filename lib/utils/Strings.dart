@@ -8,4 +8,7 @@ class Strings {
  static String internetError = 'Please check your Internet Connection';
  static String defaultExceptionMessage = 'Something went wrong, Please try again';
  static String pass = "admin@123";
+ static String newUser = "Create New User";
+ static String update = "Update User Information";
+ static String orgTeam="Manage and collaborate within your organization's teams";
 }

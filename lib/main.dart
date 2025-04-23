@@ -1,10 +1,11 @@
-import 'package:billing_web/view/Forgot_password/viewModel/RecoveryPassword_Provider.dart';
-import 'package:billing_web/view/Log_In/viewModel/login_provider.dart';
-import 'package:billing_web/view/Log_In/view/login_screen.dart';
+
+import 'package:billing_web/features/user_access/viewModel/userAccess_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'features/Forgot_password/viewModel/RecoveryPassword_Provider.dart';
+import 'features/Log_In/view/login_screen.dart';
+import 'features/Log_In/viewModel/login_provider.dart';
 
-import 'view/landing_view.dart';
 
 void main() {
   runApp(
@@ -12,6 +13,7 @@ void main() {
           providers: [
             ChangeNotifierProvider(create: (context) => LoginProvider()),
             ChangeNotifierProvider(create: (context) => RecoveryPasswordProvider()),
+            ChangeNotifierProvider(create: (context) => UserAccessProvider()),
           //  ChangeNotifierProvider(create: (context) => FirstScreenProvider()),
           ],
           child: MyApp()));
