@@ -5,6 +5,7 @@ mixin OnInit<T extends StatefulWidget> on State<T> {
   @override
   void initState() {
     super.initState();
+
     WidgetsBinding.instance
         .addPostFrameCallback((_) => afterFirstLayout(context));
   }

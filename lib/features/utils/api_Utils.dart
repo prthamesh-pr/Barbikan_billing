@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../utils/Strings.dart';
-import '../../utils/base/error_response.dart';
-import '../../utils/base/base_response.dart';
-import '../../utils/constants.dart';
+import 'Strings.dart';
+import 'base/error_response.dart';
+import 'base/base_response.dart';
+import 'constants.dart';
 import 'api_url.dart';
 
 

@@ -1,15 +1,32 @@
 
 import 'dart:convert';
 
-import 'package:billing_web/features/utils/api_url.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-import '../../../utils/constants.dart';
+
 import '../../utils/api_Utils.dart';
+import '../../utils/api_url.dart';
+import '../../utils/constants.dart';
 import '../model/userAccess_model.dart';
 
 class UserAccessProvider extends ChangeNotifier{
 
+  final TextEditingController usernameController = TextEditingController();
+  final TextEditingController mobileController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController rePasswordController = TextEditingController();
+
+  void loadUserData(Message user) {
+    usernameController.text = user.username ?? '';
+    mobileController.text = user.mobileNumber ?? '';
+    passwordController.clear();
+    rePasswordController.clear();
+    accType = user.accountType ?? 'staff';
+    notifyListeners();
+  }
+
+  String? accType = "staff";
   List<Message> userAccessList = [];
 bool isLoading=false;
    initState() {
@@ -18,21 +35,18 @@ bool isLoading=false;
 
   }
 
+
+
   Future<void> getUserAccess() async {
     isLoading=true;
     await ApiUtil.getApi(
       url: ApiUrl.userAccess,
       success: (source) {
         try {
-          print('Raw API Response: ${source.body}');
 
           Map<String, dynamic> json = jsonDecode(source.body);
-          print('API Response: $source');
-          var response = UserAndAccessModel.fromJson(json);
-          print('Calling API: ${ApiUrl.userAccess}');
-          print('response=====>>> ${source.body}');
-          print('Fetched Users Count: ${response.success}');
 
+          var response = UserAndAccessModel.fromJson(json);
           // Assuming 'data' contains a 'users' list
           if (response.data != null && response.data['users'] != null) {
             List<Message> userList = [];
@@ -63,3 +77,5 @@ bool isLoading=false;
 
 
 }
+
+

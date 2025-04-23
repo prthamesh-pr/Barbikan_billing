@@ -9,6 +9,15 @@ class Strings {
  static String defaultExceptionMessage = 'Something went wrong, Please try again';
  static String pass = "admin@123";
  static String newUser = "Create New User";
+ static String userAccess = "User and Access";
+ static String userName = "User Name";
+ static String userFullName = "Enter User Full Name";
+ static String mobileNo = "Mobile Number";
+ static String eContactNo = "Enter Contact Number";
  static String update = "Update User Information";
+ static String password = "Password";
+ static String ePassword = "Enter Password";
+ static String rePassword = "Re-enter Password";
+ static String sPassword = "Enter Secure Password";
  static String orgTeam="Manage and collaborate within your organization's teams";
 }

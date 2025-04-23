@@ -1,12 +1,14 @@
 import 'dart:convert';
 
-import 'package:billing_web/features/utils/api_Utils.dart';
-import 'package:billing_web/features/utils/api_url.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../landing_view.dart';
+import '../../utils/api_Utils.dart';
+import '../../utils/api_url.dart';
 import '../model/loginCredential.dart';
+import '../view/login_screen.dart';
 
 class LoginProvider extends ChangeNotifier{
 
@@ -87,17 +89,19 @@ class LoginProvider extends ChangeNotifier{
     notifyListeners();
   }
 
-  initState(context)  async {
 
+
+  initState(context)  async {
     SharedPreferences prefs =  await SharedPreferences.getInstance();
     bool? isLogin = prefs.getBool('isLogin');
     if(isLogin==true){
-      Navigator.push(
-        context,
+      Navigator.push(context,
         MaterialPageRoute(builder: (context) => LandingView()),
       );
     }
   }
+
+
   Future<void> loggedIn({
     Function? success,
     Function? failure,
@@ -123,8 +127,6 @@ class LoginProvider extends ChangeNotifier{
             SharedPreferences prefs = await SharedPreferences.getInstance();
             await prefs.setString('jwt_token', token);
             await prefs.setBool('isLogin', true);
-
-
 
           }
           loginCredential = loginData;

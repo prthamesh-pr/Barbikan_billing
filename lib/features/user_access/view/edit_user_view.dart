@@ -1,11 +1,15 @@
-import 'package:flutter/cupertino.dart';
+import 'package:billing_web/features/user_access/model/userAccess_model.dart';
+import 'package:billing_web/features/user_access/view/user_access_view.dart';
+import 'package:billing_web/features/user_access/viewModel/userAccess_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:provider/provider.dart';
 
-import '../../../utils/Strings.dart';
-
+import '../../utils/Strings.dart';
 class EditUserView extends StatefulWidget {
-  const EditUserView({super.key});
+
+  final UserAndAccessModel? user;
+  const EditUserView({super.key, this.user});
 
   @override
   State<EditUserView> createState() => _EditUserViewState();
@@ -18,181 +22,204 @@ class _EditUserViewState extends State<EditUserView> {
     final screenSize = MediaQuery.of(context).size;
     final isSmallScreen = screenSize.width < 600;
 
-    return Material(
-      color: Colors.white,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Header section with title and close button
-          Padding(
-            padding: EdgeInsets.all(
-              screenSize.width * 0.02,
-            ).clamp(const EdgeInsets.all(10.0), const EdgeInsets.all(20.0)),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      FittedBox(
-                        fit: BoxFit.scaleDown,
-                        alignment: Alignment.centerLeft,
-                        child: Text(Strings.update,
-                          style: Theme.of(context).textTheme.headlineSmall,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        Strings.orgTeam,
-                        style: Theme.of(context).textTheme.labelMedium,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 2,
-                      ),
-                    ],
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: Container(
-                    height: 40,
-                    width: 40,
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Color(0xffEEEEEE),
-                    ),
-                    child: const Center(child: Icon(Icons.close, size: 20)),
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          const Divider(height: 0, color: Color(0xffEEEEEE)),
-
-          // Form content in scrollable container
-          Expanded(
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                // Calculate adaptive spacing
-                final verticalSpacing = (constraints.maxHeight * 0.02).clamp(
-                  10.0,
-                  20.0,
-                );
-
-                return ListView(
-                  padding: EdgeInsets.all(constraints.maxWidth * 0.03).clamp(
-                    const EdgeInsets.all(10.0),
-                    const EdgeInsets.all(20.0),
-                  ),
+    return Consumer<UserAccessProvider>(
+      builder: (context, controller, child) {
+        return Material(
+          color: Colors.white,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Header section with title and close button
+              Padding(
+                padding: EdgeInsets.all(
+                  screenSize.width * 0.02,
+                ).clamp(const EdgeInsets.all(10.0), const EdgeInsets.all(20.0)),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    // Username and Mobile fields
-                    _buildFormRow(
-                      context,
-                      isSmallScreen: isSmallScreen,
-                      fields: [
-                        _buildFormField(
-                          context: context,
-                          label: "User Name",
-                          icon: Iconsax.user,
-                          hint: "Enter User Full Name",
-                        ),
-                        _buildFormField(
-                          context: context,
-                          label: "Mobile Number",
-                          icon: Iconsax.call,
-                          hint: "Enter Contact Number",
-                        ),
-                      ],
+                    Expanded(
+
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                         // SizedBox(height: 30),
+                          SafeArea(
+                            child: FittedBox(
+                              fit: BoxFit.scaleDown,
+                              alignment: Alignment.centerLeft,
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                child: Text(Strings.update,
+                                  style: Theme.of(context).textTheme.headlineSmall,
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                            child: Text(
+                              Strings.orgTeam,
+                              style: Theme.of(context).textTheme.labelMedium,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 2,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-
-                    SizedBox(height: verticalSpacing),
-
-                    // Password fields
-                    _buildFormRow(
-                      context,
-                      isSmallScreen: isSmallScreen,
-                      fields: [
-                        _buildFormField(
-                          context: context,
-                          label: "Password",
-                          icon: Iconsax.lock,
-                          hint: "Enter Secure Password",
-                          obscureText: true,
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: Container(
+                        height: 40,
+                        width: 40,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Color(0xffEEEEEE),
                         ),
-                        _buildFormField(
-                          context: context,
-                          label: "Re-enter Password",
-                          icon: Iconsax.lock,
-                          hint: "Enter Password",
-                          obscureText: true,
-                        ),
-                      ],
-                    ),
-
-                    SizedBox(height: verticalSpacing),
-
-                    // Account type dropdown
-                    _buildFormRow(
-                      context,
-                      isSmallScreen: isSmallScreen,
-                      fields: [
-                        _buildDropdownField(
-                          context: context,
-                          label: "Account Type",
-                          icon: Iconsax.profile_2user,
-                          hint: "Choose Account Type",
-                        ),
-                        if (!isSmallScreen) const Spacer(),
-                      ],
+                        child: const Center(child: Icon(Icons.close, size: 20)),
+                      ),
                     ),
                   ],
-                );
-              },
-            ),
-          ),
+                ),
+              ),
 
-          // Bottom action buttons
-          Container(
-            width: double.infinity,
-            padding: EdgeInsets.symmetric(
-              horizontal: (screenSize.width * 0.02).clamp(10.0, 20.0),
-              vertical: (screenSize.height * 0.015).clamp(8.0, 15.0),
-            ),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withAlpha((0.05 * 255).toInt()),
-                  blurRadius: 5,
-                  offset: const Offset(0, -1),
-                ),
-              ],
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                _buildActionButton(
-                  context: context,
-                  label: "Cancel",
-                  isOutlined: true,
-                  onTap: () => Navigator.pop(context),
-                ),
-                SizedBox(width: (screenSize.width * 0.01).clamp(8.0, 15.0)),
-                _buildActionButton(
-                  context: context,
-                  label: "Add New",
-                  onTap: () {
-                    // Add user logic here
+              const Divider(height: 0, color: Color(0xffEEEEEE)),
+
+              // Form content in scrollable container
+              Expanded(
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    // Calculate adaptive spacing
+                    final verticalSpacing = (constraints.maxHeight * 0.02).clamp(
+                      10.0,
+                      20.0,
+                    );
+
+                    return ListView(
+                      padding: EdgeInsets.all(constraints.maxWidth * 0.03).clamp(
+                        const EdgeInsets.all(10.0),
+                        const EdgeInsets.all(20.0),
+                      ),
+                      children: [
+                        // Username and Mobile fields
+                        _buildFormRow(
+                          context,
+                          isSmallScreen: isSmallScreen,
+                          fields: [
+                            _buildFormField(
+                              context: context,
+                              label: Strings.userName,
+                              icon: Iconsax.user,
+                              hint: Strings.userFullName,
+                              controller: controller.usernameController,
+                            ),
+                            _buildFormField(
+                              context: context,
+                              label: Strings.mobileNo,
+                              icon: Iconsax.call,
+                              hint: Strings.eContactNo,
+                              controller: controller.mobileController,
+                            ),
+                          ],
+                        ),
+
+                        SizedBox(height: verticalSpacing),
+
+                        // Password fields
+                        _buildFormRow(
+                          context,
+                          isSmallScreen: isSmallScreen,
+                          fields: [
+                            _buildFormField(
+                              context: context,
+                              label: Strings.password,
+                              icon: Iconsax.lock,
+                              hint: Strings.sPassword,
+                              obscureText: true,
+                              controller: controller.passwordController,
+                            ),
+                            _buildFormField(
+                              context: context,
+                              label: Strings.rePassword,
+                              icon: Iconsax.lock,
+                              hint: Strings.ePassword,
+                              obscureText: true,
+                              controller: controller.rePasswordController,
+                            ),
+                          ],
+                        ),
+
+                        SizedBox(height: verticalSpacing),
+
+                        // Account type dropdown
+                        _buildFormRow(
+                          context,
+                          isSmallScreen: isSmallScreen,
+                          fields: [
+                            _buildDropdownField(
+                              context: context,
+                              label: "Account Type",
+                              icon: Iconsax.profile_2user,
+                              hint: "Choose Account Type",
+                             // controller.usernameController,
+                            ),
+                            if (!isSmallScreen) const Spacer(),
+                          ],
+                        ),
+                      ],
+                    );
                   },
                 ),
-              ],
-            ),
+              ),
+
+              // Bottom action buttons
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.symmetric(
+                  horizontal: (screenSize.width * 0.02).clamp(10.0, 20.0),
+                  vertical: (screenSize.height * 0.015).clamp(8.0, 15.0),
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withAlpha((0.05 * 255).toInt()),
+                      blurRadius: 5,
+                      offset: const Offset(0, -1),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    _buildActionButton(
+                      context: context,
+                      label: "Cancel",
+                      isOutlined: true,
+                      onTap: () => Navigator.pop(context),
+                    ),
+                    SizedBox(width: (screenSize.width * 0.01).clamp(8.0, 15.0)),
+                    _buildActionButton(
+                      context: context,
+                      label: "Update",
+                      onTap: () {
+                        Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => UserAndAccessView(),
+                            ));
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
+        );
+      }
     );
   }
 
@@ -229,6 +256,7 @@ class _EditUserViewState extends State<EditUserView> {
     required String label,
     required IconData icon,
     required String hint,
+    required TextEditingController controller,
     bool obscureText = false,
   }) {
     return Column(
@@ -237,6 +265,7 @@ class _EditUserViewState extends State<EditUserView> {
         Text(label, style: Theme.of(context).textTheme.labelLarge),
         const SizedBox(height: 5),
         TextFormField(
+          controller: controller,
           obscureText: obscureText,
           decoration: InputDecoration(
             prefixIcon: Icon(icon, size: 18),

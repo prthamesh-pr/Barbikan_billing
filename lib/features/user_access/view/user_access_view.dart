@@ -1,10 +1,13 @@
 
 import 'package:billing_web/features/user_access/view/create_user_view.dart';
 import 'package:billing_web/features/user_access/viewModel/userAccess_provider.dart';
-import 'package:billing_web/utils/on_init.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
+
+import '../../utils/Strings.dart';
+import '../../utils/on_init.dart';
+import 'edit_user_view.dart';
 
 class UserAndAccessView extends StatefulWidget {
   const UserAndAccessView({super.key});
@@ -49,14 +52,12 @@ class _UserAndAccessViewState extends State<UserAndAccessView> with OnInit{
     final headerWidget = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          "User and Access",
+        Text(Strings.userAccess,
           style: Theme.of(context).textTheme.headlineSmall?.copyWith(
             fontSize: isSmallScreen ? 20 : null,
           ),
         ),
-        Text(
-          "Manage and collaborate within your organization's teams",
+        Text(Strings.orgTeam,
           style: Theme.of(context).textTheme.labelMedium,
         ),
       ],
@@ -173,9 +174,10 @@ class _UserAndAccessViewState extends State<UserAndAccessView> with OnInit{
                               color: Colors.blue,
                               icon: Icon(Iconsax.edit, size: isSmallScreen ? 16 : 20),
                               onPressed: () {
+                                controller.loadUserData(staff);
                                 Navigator.of(context).push(
                                     MaterialPageRoute(
-                                      builder: (context) => const CreateNewUserView(),
+                                      builder: (context) => EditUserView(),
                                     ));
                               },
                             ),

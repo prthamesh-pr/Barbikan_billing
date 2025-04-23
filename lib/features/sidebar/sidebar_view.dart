@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../Log_In/view/login_screen.dart';
 import 'menu_view.dart';
 
@@ -139,8 +140,11 @@ class _SideBarViewState extends State<SideBarView> {
                             child: Text('Cancel'),
                           ),
                           ElevatedButton(
-                            onPressed: () {
-                             // Navigator.of(context).pop(); // close dialog
+                            onPressed: () async {
+                             // close dialog
+                              SharedPreferences prefs = await SharedPreferences.getInstance();
+                              await prefs.setBool('isLogin', false);
+
                               Navigator.of(context).pushReplacement(
                                 MaterialPageRoute(builder: (context) => LoginScreen()),
                               );
