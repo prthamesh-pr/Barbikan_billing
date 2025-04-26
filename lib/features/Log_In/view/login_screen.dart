@@ -6,7 +6,7 @@ import '../../landing_view.dart';
 import '../../utils/on_init.dart';
 import '../viewModel/login_provider.dart';
 
-class  LoginScreen extends StatefulWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
   @override
@@ -16,23 +16,22 @@ class  LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> with OnInit {
   @override
   Widget build(BuildContext context) {
-    return MediaQuery.of(context).size.width < 600
-        ? Scaffold(
-          body: Consumer<LoginProvider>(
-            builder: (context, model, child) {
-              // if (model == null) return Center(child: Text('Loading...'));
-              return SingleChildScrollView(
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(
-                    minHeight: MediaQuery.of(context).size.height,
-                  ),
-                  child: IntrinsicHeight(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      //crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          final isMobile = constraints.maxWidth < 600;
+          return Center(
+            child: Container(
+              width: isMobile ? double.infinity : 500,
+              padding: const EdgeInsets.all(16),
+              child: SingleChildScrollView(
+                child: Consumer<LoginProvider>(
+                  builder: (context, model, child) {
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        SizedBox(height: 80),
+                        const SizedBox(height: 80),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -42,7 +41,7 @@ class _LoginScreenState extends State<LoginScreen> with OnInit {
                             ),
                           ],
                         ),
-                        Text(
+                        const Text(
                           'Adhicine',
                           style: TextStyle(
                             color: Colors.blueAccent,
@@ -50,11 +49,11 @@ class _LoginScreenState extends State<LoginScreen> with OnInit {
                             fontSize: 15,
                           ),
                         ),
-                        SizedBox(height: 40),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 12),
-                          child: Align(
-                            alignment: Alignment.centerLeft,
+                        const SizedBox(height: 40),
+                        const Align(
+                          alignment: Alignment.centerLeft,
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 12),
                             child: Text(
                               "Sign In",
                               style: TextStyle(
@@ -64,18 +63,17 @@ class _LoginScreenState extends State<LoginScreen> with OnInit {
                             ),
                           ),
                         ),
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 20),
                           child: TextField(
                             controller: model.emailController,
                             decoration: InputDecoration(
                               hintText: 'Enter Email or Phone Number',
-                              prefixIcon: Icon(Icons.email),
+                              prefixIcon: const Icon(Icons.email),
                               errorText: model.emailError,
                             ),
                             inputFormatters: [
-                              //FilteringTextInputFormatter.digitsOnly,
                               LengthLimitingTextInputFormatter(10),
                             ],
                             onChanged: (value) {
@@ -87,7 +85,7 @@ class _LoginScreenState extends State<LoginScreen> with OnInit {
                             },
                           ),
                         ),
-                        SizedBox(height: 10),
+                        const SizedBox(height: 10),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 20),
                           child: TextField(
@@ -95,7 +93,7 @@ class _LoginScreenState extends State<LoginScreen> with OnInit {
                             obscureText: !model.isPasswordVisible,
                             decoration: InputDecoration(
                               hintText: "Password",
-                              prefixIcon: Icon(Icons.lock),
+                              prefixIcon: const Icon(Icons.lock),
                               suffixIcon: IconButton(
                                 icon: Icon(
                                   model.isPasswordVisible
@@ -106,7 +104,6 @@ class _LoginScreenState extends State<LoginScreen> with OnInit {
                                   model.PasswordVisibility();
                                 },
                               ),
-
                               errorText: model.passwordError,
                             ),
                             onChanged: (value) {
@@ -126,13 +123,13 @@ class _LoginScreenState extends State<LoginScreen> with OnInit {
                                 ),
                               );
                             },
-                            child: Text(
+                            child: const Text(
                               "Forgot Password?",
                               style: TextStyle(color: Colors.blueAccent),
                             ),
                           ),
                         ),
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 20),
                           child: ElevatedButton(
@@ -148,22 +145,18 @@ class _LoginScreenState extends State<LoginScreen> with OnInit {
                                   );
                                 },
                                 failure: (error) {
-                                  print(
-                                    "Error Message12345======: ${model.errorMessage}",
-                                  );
                                   showDialog(
                                     context: context,
                                     builder: (BuildContext context) {
                                       return AlertDialog(
-                                        // title: Text("Login Failed"),
-                                        content: Text(model.errorMessage!),
+                                        content: Text(
+                                          model.errorMessage ?? "Login failed.",
+                                        ),
                                         actions: [
                                           TextButton(
-                                            child: Text("OK"),
+                                            child: const Text("OK"),
                                             onPressed: () {
-                                              Navigator.of(
-                                                context,
-                                              ).pop(); // dismiss dialog
+                                              Navigator.of(context).pop();
                                             },
                                           ),
                                         ],
@@ -175,12 +168,12 @@ class _LoginScreenState extends State<LoginScreen> with OnInit {
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.blueAccent,
-                              minimumSize: Size(double.infinity, 50),
+                              minimumSize: const Size(double.infinity, 50),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(15),
                               ),
                             ),
-                            child: Text(
+                            child: const Text(
                               "Log In",
                               style: TextStyle(
                                 color: Colors.white,
@@ -194,13 +187,15 @@ class _LoginScreenState extends State<LoginScreen> with OnInit {
                             padding: const EdgeInsets.only(top: 10),
                             child: Text(
                               model.errorMessage!,
-                              style: TextStyle(color: Colors.red, fontSize: 14),
+                              style: const TextStyle(
+                                color: Colors.red,
+                                fontSize: 14,
+                              ),
                             ),
                           ),
-
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
                         Row(
-                          children: [
+                          children: const [
                             Expanded(child: Divider()),
                             Padding(
                               padding: EdgeInsets.symmetric(horizontal: 10),
@@ -209,7 +204,7 @@ class _LoginScreenState extends State<LoginScreen> with OnInit {
                             Expanded(child: Divider()),
                           ],
                         ),
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 20),
                           child: ElevatedButton.icon(
@@ -217,47 +212,49 @@ class _LoginScreenState extends State<LoginScreen> with OnInit {
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.white,
                               side: BorderSide(color: Colors.grey.shade300),
-                              minimumSize: Size(double.infinity, 50),
+                              minimumSize: const Size(double.infinity, 50),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(15),
                               ),
                             ),
                             icon: Image.network(model.google, height: 24),
-                            label: Text(
+                            label: const Text(
                               "Continue with Google",
                               style: TextStyle(color: Colors.black),
                             ),
                           ),
                         ),
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text("New to Adhicine?"),
+                            const Text("New to Adhicine?"),
                             TextButton(
-                              onPressed: () {},
-                              child: Text(
+                              onPressed: () {
+                                // Navigate to Sign Up
+                              },
+                              child: const Text(
                                 "Sign Up",
                                 style: TextStyle(color: Colors.blueAccent),
                               ),
                             ),
                           ],
                         ),
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
                       ],
-                    ),
-                  ),
+                    );
+                  },
                 ),
-              );
-            },
-          ),
-        )
-        : Container();
+              ),
+            ),
+          );
+        },
+      ),
+    );
   }
 
   @override
   void afterFirstLayout(BuildContext context) {
-    // TODO: implement afterFirstLayout
     Provider.of<LoginProvider>(context, listen: false).initState(context);
   }
 }

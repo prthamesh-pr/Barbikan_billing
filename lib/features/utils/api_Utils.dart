@@ -1,15 +1,18 @@
 import 'dart:convert';
 import 'dart:io';
+
+import 'package:billing_web/features/utils/network_utils.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import 'Strings.dart';
-import 'base/error_response.dart';
-import 'base/base_response.dart';
-import 'constants.dart';
 import 'api_url.dart';
+import 'base/base_response.dart';
+import 'base/error_response.dart';
+import 'constants.dart';
 
 class ApiUtil {
   static final ApiUtil singleton = ApiUtil._internal();
@@ -106,7 +109,7 @@ class ApiUtil {
     required Function failure,
     Function(int, int)? downloadProgress,
   }) async {
-    var connected = await kInternetCheck();
+    var connected = await hasInternetConnection();
     if (!connected) {
       return failure(Strings.internetError);
     }
@@ -132,7 +135,7 @@ class ApiUtil {
     required Function failure,
     Function(int, int)? downloadProgress,
   }) async {
-    var connected = await kInternetCheck();
+    var connected = await hasInternetConnection();
     if (!connected) {
       return failure(Strings.internetError);
     }
@@ -159,7 +162,7 @@ class ApiUtil {
     required Function failure,
     Function(int, int)? downloadProgress,
   }) async {
-    var connected = await kInternetCheck();
+    var connected = await hasInternetConnection();
     if (!connected) {
       return failure(Strings.internetError);
     }
@@ -188,7 +191,7 @@ class ApiUtil {
     Function(int, int)? sendProgress,
     Function(int, int)? downloadProgress,
   }) async {
-    var connected = await kInternetCheck();
+    var connected = await hasInternetConnection();
     if (!connected) {
       return failure(Strings.internetError);
     }
@@ -219,7 +222,7 @@ class ApiUtil {
     Function(int, int)? sendProgress,
     Function(int, int)? downloadProgress,
   }) async {
-    var connected = await kInternetCheck();
+    var connected = await hasInternetConnection();
     if (!connected) {
       return failure(Strings.internetError);
     }
@@ -250,7 +253,7 @@ class ApiUtil {
     kPrintLog(body);
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('jwt_token');
-    bool connected = await kInternetCheck();
+    bool connected = await hasInternetConnection();
     if (!connected) {
       return failure(Strings.internetError);
     }
@@ -310,7 +313,7 @@ class ApiUtil {
     kPrintLog(url);
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('jwt_token');
-    bool connected = await kInternetCheck();
+    bool connected = await hasInternetConnection();
     if (!connected) {
       return failure(Strings.internetError);
     }
@@ -350,7 +353,7 @@ class ApiUtil {
   }) async {
     kPrintLog(url);
 
-    bool connected = await kInternetCheck();
+    bool connected = await hasInternetConnection();
     if (!connected) {
       return failure(Strings.internetError);
     }
@@ -401,7 +404,7 @@ class ApiUtil {
   }) async {
     kPrintLog("$url");
 
-    bool connected = await kInternetCheck();
+    bool connected = await hasInternetConnection();
 
     if (!connected) {
       return failure(Strings.internetError);

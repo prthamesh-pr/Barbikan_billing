@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:billing_web/features/utils/api_Utils.dart';
 import 'package:billing_web/features/utils/api_url.dart';
+import 'package:billing_web/features/utils/network_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -100,6 +101,16 @@ class LoginProvider extends ChangeNotifier {
     Function? failure,
     required BuildContext context,
   }) async {
+    // ✅ Step 1: Check Internet Connection
+    bool isConnected = await hasInternetConnection();
+    if (!isConnected) {
+      errorMessage = 'No internet connection';
+      notifyListeners();
+      if (failure != null) failure('No internet connection');
+      return;
+    }
+
+    // ✅ Step 2: Proceed if connected
     Map<String, dynamic> body = {
       "mobile_number": emailController.text,
       "password": passController.text,
@@ -114,30 +125,26 @@ class LoginProvider extends ChangeNotifier {
 
         if (loginData.success!) {
           var token = loginData.data?.token;
-          var user = loginData.data?.user;
 
           if (token != null && token.isNotEmpty) {
             SharedPreferences prefs = await SharedPreferences.getInstance();
             await prefs.setString('jwt_token', token);
             await prefs.setBool('isLogin', true);
           }
+
           loginCredential = loginData;
-          errorMessage = null; // clear old errors
+          errorMessage = null;
           notifyListeners();
           if (success != null) success();
         } else {
           errorMessage = loginData.message ?? 'Login failed';
           notifyListeners();
-          if (failure != null) {
-            failure(loginData.message);
-          }
+          if (failure != null) failure(loginData.message);
         }
       },
       failure: (message) {
         errorMessage = message ?? 'Something went wrong';
         notifyListeners();
-        print("API failure triggered with message: $message");
-
         if (failure != null) failure(message);
       },
       context: context,

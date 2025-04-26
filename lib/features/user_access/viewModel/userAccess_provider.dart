@@ -1,17 +1,13 @@
-
 import 'dart:convert';
 
-
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 
 import '../../utils/api_Utils.dart';
 import '../../utils/api_url.dart';
 import '../../utils/constants.dart';
 import '../model/userAccess_model.dart';
 
-class UserAccessProvider extends ChangeNotifier{
-
+class UserAccessProvider extends ChangeNotifier {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController mobileController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
@@ -28,22 +24,18 @@ class UserAccessProvider extends ChangeNotifier{
 
   String? accType = "staff";
   List<Message> userAccessList = [];
-bool isLoading=false;
-   initState() {
-     isLoading=false;
-      getUserAccess();
-
+  bool isLoading = false;
+  initState() {
+    isLoading = false;
+    getUserAccess();
   }
 
-
-
   Future<void> getUserAccess() async {
-    isLoading=true;
+    isLoading = true;
     await ApiUtil.getApi(
       url: ApiUrl.userAccess,
       success: (source) {
         try {
-
           Map<String, dynamic> json = jsonDecode(source.body);
 
           var response = UserAndAccessModel.fromJson(json);
@@ -56,7 +48,7 @@ bool isLoading=false;
 
             userAccessList.clear();
             userAccessList.addAll(userList);
-            isLoading=false;// Add the list of users to your list
+            isLoading = false; // Add the list of users to your list
           }
 
           // Notify listeners after updating the data
@@ -68,14 +60,6 @@ bool isLoading=false;
       failure: (errorMessage) {
         kPrintLog("Failed to get user access: $errorMessage");
       },
-
     );
-
   }
-
-
-
-
 }
-
-
