@@ -145,6 +145,7 @@ class _EditUserViewState extends State<EditUserView> {
                               icon: Iconsax.lock,
                               hint: Strings.sPassword,
                               obscureText: true,
+
                               controller: controller.passwordController,
                             ),
                             _buildFormField(
@@ -211,11 +212,46 @@ class _EditUserViewState extends State<EditUserView> {
                     _buildActionButton(
                       context: context,
                       label: "Update",
-                      onTap: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => UserAndAccessView(),
-                          ),
+                      onTap: () async {
+                        if (controller.passwordController.text.isEmpty) {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: const Text("Validation Error"),
+                                content: Text("Please enter 8 Digit Password."),
+                                actions: [
+                                  TextButton(
+                                    onPressed:
+                                        () => Navigator.of(context).pop(),
+                                    child: const Text("OK"),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                          return;
+                        }
+
+                        await controller.PutUsersUpdate(
+                          success: () {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text("User updated successfully"),
+                              ),
+                            );
+                            //Navigator.pop(context);
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => UserAndAccessView(),
+                              ),
+                            );
+                          },
+                          failure: (error) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text("Update failed: $error")),
+                            );
+                          },
                         );
                       },
                     ),

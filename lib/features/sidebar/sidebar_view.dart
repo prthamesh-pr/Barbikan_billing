@@ -137,6 +137,8 @@ class _SideBarViewState extends State<SideBarView> {
                             onPressed: () {
                               Navigator.of(context).pop(); // close dialog
                             },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white),
                             child: Text('Cancel'),
                           ),
                           ElevatedButton(
@@ -149,6 +151,8 @@ class _SideBarViewState extends State<SideBarView> {
                                 MaterialPageRoute(builder: (context) => LoginScreen()),
                               );
                             },
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.white),
                             child: Text('Logout'),
                           ),
                         ],

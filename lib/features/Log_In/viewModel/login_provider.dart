@@ -1,12 +1,11 @@
 import 'dart:convert';
 
-import 'package:billing_web/features/utils/api_Utils.dart';
-import 'package:billing_web/features/utils/api_url.dart';
-import 'package:billing_web/features/utils/network_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../landing_view.dart';
+import '../../utils/api_Utils.dart';
+import '../../utils/api_url.dart';
 import '../model/loginCredential.dart';
 
 class LoginProvider extends ChangeNotifier {
@@ -101,16 +100,6 @@ class LoginProvider extends ChangeNotifier {
     Function? failure,
     required BuildContext context,
   }) async {
-    // ✅ Step 1: Check Internet Connection
-    bool isConnected = await hasInternetConnection();
-    if (!isConnected) {
-      errorMessage = 'No internet connection';
-      notifyListeners();
-      if (failure != null) failure('No internet connection');
-      return;
-    }
-
-    // ✅ Step 2: Proceed if connected
     Map<String, dynamic> body = {
       "mobile_number": emailController.text,
       "password": passController.text,
@@ -147,7 +136,6 @@ class LoginProvider extends ChangeNotifier {
         notifyListeners();
         if (failure != null) failure(message);
       },
-      context: context,
     );
   }
 }

@@ -1,11 +1,12 @@
-import 'package:billing_web/features/company/services/company_service.dart';
 import 'package:billing_web/features/company/view/add_new_company.dart';
 import 'package:billing_web/features/company/view/update_company_view.dart';
+import 'package:billing_web/features/company/viewModels/companyProvider.dart';
 import 'package:billing_web/features/config.dart';
-import 'package:billing_web/model/company_model.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:provider/provider.dart';
+
+import '../../utils/on_init.dart';
 
 class CompanyListView extends StatefulWidget {
   const CompanyListView({super.key});
@@ -14,57 +15,11 @@ class CompanyListView extends StatefulWidget {
   State<CompanyListView> createState() => _CompanyListViewState();
 }
 
-class _CompanyListViewState extends State<CompanyListView> {
-  // final List<Map<String, dynamic>> companyList = [
-  //   {
-  //     'sno': 1,
-  //     'companyName': 'ABC Pvt Ltd',
-  //     'gst': '29ABCDE1234F1Z5',
-  //     'mobile': '9876543210',
-  //   },
-  //   {
-  //     'sno': 2,
-  //     'companyName': 'XYZ Corp',
-  //     'gst': '27XYZDE5678G1Z3',
-  //     'mobile': '9876543211',
-  //   },
-  //   {
-  //     'sno': 3,
-  //     'companyName': 'LMN Ltd',
-  //     'gst': '30LMNDE9101H1Z7',
-  //     'mobile': '9876543212',
-  //   },
-  // ];
-
-  List<CompanyModel> companyList = [];
-  bool isLoading = false;
-
+class _CompanyListViewState extends State<CompanyListView> with OnInit {
   @override
-  void initState() {
-    super.initState();
-    fetchCompanies();
-  }
-
-  Future<void> fetchCompanies() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('jwt_token');
-
-    if (token != null && token.isNotEmpty) {
-      try {
-        final companies = await CompanyService().getCompanies(token);
-        setState(() {
-          companyList =
-              companies.data ??
-              []; // Extract the data property and handle null safety
-        });
-      } catch (e) {
-        print("Error fetching companies: $e");
-        // Show a snackbar or handle the error
-      }
-    } else {
-      print("No token found!");
-      // Redirect to login or show a message
-    }
+  void afterFirstLayout(BuildContext context) {
+    // Add your initialization logic here
+    print('afterFirstLayout called');
   }
 
   @override
@@ -175,64 +130,64 @@ class _CompanyListViewState extends State<CompanyListView> {
   }
 
   Widget _buildDataTable(BuildContext context, bool isTablet) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.red,
-        borderRadius: BorderRadius.circular(10),
-      ),
-      width: double.infinity,
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: ConstrainedBox(
-          constraints: BoxConstraints(
-            minWidth: MediaQuery.of(context).size.width - 30,
-          ),
-          child: DataTable(
-            columnSpacing: isTablet ? 15.0 : 20.0,
-            horizontalMargin: isTablet ? 10.0 : 20.0,
-            columns: [
-              DataColumn(
-                label: Text(
-                  'S.NO',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
+    return Consumer<CompanyProvider>(
+      builder: (context, controller, child) {
+        if (controller.isLoading) {
+          return Center(child: CircularProgressIndicator(color: Colors.orange));
+        } else if (controller.listOfCompany.isEmpty) {
+          return Center(child: Text('No companies found.'));
+        }
+        return Container(
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
+          width: double.infinity,
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minWidth: MediaQuery.of(context).size.width - 30,
               ),
-              DataColumn(
-                label: Text(
-                  'Company Name',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-              ),
-              DataColumn(
-                label: Text(
-                  'GST Number',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-              ),
-              DataColumn(
-                label: Text(
-                  'Mobile Number',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-              ),
-              DataColumn(
-                label: Text(
-                  'Action',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-              ),
-            ],
-            rows:
-                companyList.asMap().entries.map((entry) {
-                  int index = entry.key;
-                  CompanyModel company = entry.value;
 
+              child: DataTable(
+                columnSpacing: isTablet ? 15.0 : 20.0,
+                horizontalMargin: isTablet ? 10.0 : 20.0,
+                columns: [
+                  DataColumn(
+                    label: Text(
+                      'S.NO',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  DataColumn(
+                    label: Text(
+                      'Company Name',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  DataColumn(
+                    label: Text(
+                      'GST Number',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  DataColumn(
+                    label: Text(
+                      'Mobile Number',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  //  DataColumn(label: Text('Action', style: TextStyle(fontWeight: FontWeight.bold))),
+                ],
+                rows: List<DataRow>.generate(controller.listOfCompany.length, (
+                  index,
+                ) {
+                  final user = controller.listOfCompany[index];
                   return DataRow(
                     cells: [
+                      // DataCell(Text(user.['sno'].toString())),
                       DataCell(Text((index + 1).toString())),
-                      DataCell(Text(company.companyName)),
-                      DataCell(Text(company.gstNumber)),
-                      DataCell(Text(company.mobileNumber)),
+                      DataCell(Text(user.companyName.toString())),
+                      DataCell(Text(user.gstNumber.toString())),
+                      DataCell(Text(user.mobileNumber.toString())),
                       DataCell(
                         Row(
                           mainAxisSize: MainAxisSize.min,
@@ -244,6 +199,7 @@ class _CompanyListViewState extends State<CompanyListView> {
                                 size: isTablet ? 18 : 24,
                               ),
                               onPressed: () {
+                                // controller.loadUserData(company); // if you have this
                                 creationPageConfig.changePage(
                                   UpdateCompanyView(),
                                 );
@@ -257,7 +213,7 @@ class _CompanyListViewState extends State<CompanyListView> {
                                 size: isTablet ? 18 : 24,
                               ),
                               onPressed: () {
-                                // Handle delete action
+                                //  controller.deleteCompanyBySno(company['sno']); // if you have this method
                               },
                             ),
                           ],
@@ -265,108 +221,143 @@ class _CompanyListViewState extends State<CompanyListView> {
                       ),
                     ],
                   );
-                }).toList(),
+                }),
+              ),
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
   Widget _buildMobileList(BuildContext context) {
-    return Column(
-      children:
-          companyList.map((company) {
-            return Card(
-              color: Colors.white,
-              margin: const EdgeInsets.only(bottom: 12),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              elevation: 3,
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    /// Company Name and Serial Number Row
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Consumer<CompanyProvider>(
+      builder: (context, controller, child) {
+        // if (controller.isLoading) {
+        //   return Center(child: CircularProgressIndicator(color: Colors.orange));
+        // } else if (controller.listOfCompany.isEmpty) {
+        //   return Center(child: Text('No companies found.'));
+        // }
+        return Column(
+          children: [
+            // companyList.map((company) {
+            ListView.builder(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              itemCount: controller.listOfCompany.length,
+              itemBuilder: (context, index) {
+                final user = controller.listOfCompany[index];
+                return Card(
+                  color: Colors.white,
+                  margin: const EdgeInsets.only(bottom: 10),
+                  child: Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Expanded(
-                          child: Text(
-                            company.companyName,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                user.companyName!,
+                                // 'Company name',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
                             ),
-                            overflow: TextOverflow.ellipsis,
-                          ),
+                            Text(
+                              '#${index + 1}',
+                              style: TextStyle(
+                                color: Colors.grey[600],
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
                         ),
-                        Text(
-                          '#${company.id}',
-                          style: TextStyle(
-                            color: Colors.grey[600],
-                            fontWeight: FontWeight.w500,
-                          ),
+                        const SizedBox(height: 8),
+                        _buildInfoRow('GST:', user.gstNumber!),
+                        _buildInfoRow('Mobile:', user.mobileNumber!),
+
+                        // _buildInfoRow('FSSAI:', user.fssaiNumber!),
+                        // _buildInfoRow('Email:', user.email!),
+                        // _buildInfoRow('Bill Prefix:', user.email!),
+                        // _buildInfoRow('Address:', user.billingAddress!),
+                        // _buildInfoRow('City:', user.city!),
+                        // _buildInfoRow('state:', user.state!),
+                        // _buildInfoRow('Bank Name:', user.bankName!),
+                        // _buildInfoRow('Account no:', user.accountNumber!),
+                        // _buildInfoRow('Ifsc Code:', user.ifscCode!),
+                        const SizedBox(height: 8),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            GestureDetector(
+                              onTapDown: (TapDownDetails details) async {
+                                final RenderBox overlay =
+                                    Overlay.of(
+                                          context,
+                                        ).context.findRenderObject()
+                                        as RenderBox;
+
+                                await showMenu(
+                                  context: context,
+                                  position: RelativeRect.fromRect(
+                                    details.globalPosition &
+                                        const Size(
+                                          40,
+                                          40,
+                                        ), // position where the menu will appear
+                                    Offset.zero & overlay.size,
+                                  ),
+                                  color: Colors.white, // Background color
+                                  //elevation: 0,
+                                  items: [
+                                    PopupMenuItem(
+                                      value: 'edit',
+                                      child: Row(
+                                        children: const [
+                                          Icon(Icons.edit, color: Colors.black),
+                                          SizedBox(width: 8),
+                                          Text('Edit'),
+                                        ],
+                                      ),
+                                    ),
+                                    PopupMenuItem(
+                                      value: 'delete',
+                                      child: Row(
+                                        children: const [
+                                          Icon(Icons.delete),
+                                          SizedBox(width: 8),
+                                          Text('Delete'),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                  //  color: Colors.transparent,
+                                ).then((value) {
+                                  if (value == 'edit') {
+                                    // Handle Edit
+                                    print('Edit Clicked');
+                                  } else if (value == 'delete') {}
+                                });
+                              },
+                              child: Icon(Icons.more_horiz),
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                    const SizedBox(height: 10),
-
-                    /// GST and Mobile
-                    _buildInfoRow('GST:', company.gstNumber),
-                    _buildInfoRow('Mobile:', company.mobileNumber),
-                    const SizedBox(height: 14),
-
-                    /// Action Buttons
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        ElevatedButton.icon(
-                          onPressed: () {
-                            creationPageConfig.changePage(UpdateCompanyView());
-                            scaffoldKey.currentState!.openEndDrawer();
-                          },
-                          icon: const Icon(Iconsax.edit, size: 18),
-                          label: const Text('Edit'),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blue,
-                            foregroundColor: Colors.white,
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 14,
-                              vertical: 10,
-                            ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 10),
-                        ElevatedButton.icon(
-                          onPressed: () {
-                            // Handle delete action
-                          },
-                          icon: const Icon(Iconsax.trash, size: 18),
-                          label: const Text('Delete'),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.red,
-                            foregroundColor: Colors.white,
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 14,
-                              vertical: 10,
-                            ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            );
-          }).toList(),
+                  ),
+                );
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 

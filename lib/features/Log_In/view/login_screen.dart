@@ -14,6 +14,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> with OnInit {
+  //TextEditingController emailController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,14 +64,16 @@ class _LoginScreenState extends State<LoginScreen> with OnInit {
                             ),
                           ),
                         ),
-                        const SizedBox(height: 20),
+                        SizedBox(height: 20),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 20),
                           child: TextField(
                             controller: model.emailController,
+                            keyboardType: TextInputType.number,
                             decoration: InputDecoration(
-                              hintText: 'Enter Email or Phone Number',
-                              prefixIcon: const Icon(Icons.email),
+                              hintText: 'Phone Number',
+                              prefixIcon: Icon(Icons.email),
+
                               errorText: model.emailError,
                             ),
                             inputFormatters: [
@@ -78,14 +81,20 @@ class _LoginScreenState extends State<LoginScreen> with OnInit {
                             ],
                             onChanged: (value) {
                               if (value.length == 10) {
+                                // if(model.emailController.text =='1234567890' && model.passController = 'admin@123'){
+                                //
+                                // }
                                 FocusScope.of(context).unfocus();
                               }
+                              ;
                               model.clearErrorMessage();
                               model.validateEmailOrPhone(value);
                             },
                           ),
                         ),
-                        const SizedBox(height: 10),
+                        SizedBox(height: 10),
+
+                        /// PASSWORD===================
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 20),
                           child: TextField(
@@ -165,6 +174,8 @@ class _LoginScreenState extends State<LoginScreen> with OnInit {
                                   );
                                 },
                               );
+                              // Navigator.push(
+                              //   context, MaterialPageRoute(builder: (context) => LandingView()),);
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.blueAccent,
@@ -193,9 +204,10 @@ class _LoginScreenState extends State<LoginScreen> with OnInit {
                               ),
                             ),
                           ),
-                        const SizedBox(height: 20),
+
+                        SizedBox(height: 20),
                         Row(
-                          children: const [
+                          children: [
                             Expanded(child: Divider()),
                             Padding(
                               padding: EdgeInsets.symmetric(horizontal: 10),
@@ -208,39 +220,75 @@ class _LoginScreenState extends State<LoginScreen> with OnInit {
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 20),
                           child: ElevatedButton.icon(
-                            onPressed: () {},
+                            onPressed: () {
+                              model.loggedIn(
+                                context: context,
+                                success: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => LandingView(),
+                                    ),
+                                  );
+                                },
+                                failure: (error) {
+                                  print(
+                                    "Error Message12345======: ${model.errorMessage}",
+                                  );
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        // title: Text("Login Failed"),
+                                        content: Text(model.errorMessage!),
+                                        actions: [
+                                          TextButton(
+                                            child: Text("OK"),
+                                            onPressed: () {
+                                              Navigator.of(
+                                                context,
+                                              ).pop(); // dismiss dialog
+                                            },
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                },
+                              );
+                              // Navigator.push(
+                              //   context, MaterialPageRoute(builder: (context) => LandingView()),);
+                            },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.white,
                               side: BorderSide(color: Colors.grey.shade300),
-                              minimumSize: const Size(double.infinity, 50),
+                              minimumSize: Size(double.infinity, 50),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(15),
                               ),
                             ),
                             icon: Image.network(model.google, height: 24),
-                            label: const Text(
+                            label: Text(
                               "Continue with Google",
                               style: TextStyle(color: Colors.black),
                             ),
                           ),
                         ),
-                        const SizedBox(height: 20),
+                        SizedBox(height: 20),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Text("New to Adhicine?"),
+                            Text("New to Adhicine?"),
                             TextButton(
-                              onPressed: () {
-                                // Navigate to Sign Up
-                              },
-                              child: const Text(
+                              onPressed: () {},
+                              child: Text(
                                 "Sign Up",
                                 style: TextStyle(color: Colors.blueAccent),
                               ),
                             ),
                           ],
                         ),
-                        const SizedBox(height: 20),
+                        SizedBox(height: 20),
                       ],
                     );
                   },

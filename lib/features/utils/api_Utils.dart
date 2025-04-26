@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:billing_web/features/utils/network_utils.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -227,6 +226,15 @@ class ApiUtil {
       return failure(Strings.internetError);
     }
     try {
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString("jwt_token");
+      final headers = options?.headers ?? {};
+      if (token != null) {
+        headers["Authorization"] = "Bearer $token";
+      }
+      Options requestOptions = options ?? Options();
+      requestOptions = requestOptions.copyWith(headers: headers);
+
       Response response = await dio!.put(
         url,
         data: data,
@@ -247,7 +255,7 @@ class ApiUtil {
     required String body,
     required Function success,
     required failure,
-    required BuildContext context,
+    // required BuildContext context,
   }) async {
     kPrintLog(url);
     kPrintLog(body);
@@ -259,6 +267,79 @@ class ApiUtil {
     }
     try {
       var response = await http.post(
+        Uri.parse(url ?? ''),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token",
+        },
+        body: body,
+      );
+      Future.delayed(const Duration(seconds: 5), () {});
+      kPrintLog("StatusCode:${response.statusCode}");
+      kPrintLog('Response:${response.body}');
+
+      statusCode = response.statusCode;
+
+      String responseBody = response.body;
+
+      responseBody = responseBody.replaceAll(RegExp(r'\{"d":null\}$'), '');
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        // if (response.body.contains('SessionTimeOut')) {
+        //   CustomToast().showCustomToast(
+        //     type: SnackBarType.error,
+        //     message: "SessionTimeOut",
+        //   );
+        //   AppFunctions().resetAllProviders(context);
+        //   NavigateToPage.pushNamedReplacement(context, LoginScreen.routeName);
+        // }
+        return success(responseBody);
+      } else if (response.statusCode == 302) {
+        return failure("Session Expired");
+      } else {
+        // Removed unused variable 'decoded'
+        // Removed unused variable 'decoded'
+        jsonDecode(response.body);
+        jsonDecode(response.body);
+        jsonDecode(response.body);
+        jsonDecode(response.body);
+        jsonDecode(response.body);
+        jsonDecode(response.body);
+        jsonDecode(response.body);
+        jsonDecode(response.body);
+        jsonDecode(response.body);
+        jsonDecode(response.body);
+        jsonDecode(response.body);
+        var decoded = jsonDecode(response.body);
+        BaseResponse res = BaseResponse.fromJson(decoded, (data) => null);
+        if (res.statusCode! == 401) {
+          return failure("Invalid credentials");
+        }
+        //   else{
+        //   return failure(res.message ?? ""); /*}*/
+        // }
+      }
+    } on Exception catch (e) {
+      kPrintLog("Exception:${e.toString()}");
+      return failure(Strings.defaultExceptionMessage);
+    }
+  }
+
+  static Future postApiWithput({
+    required String? url,
+    required String body,
+    required Function success,
+    required failure,
+  }) async {
+    kPrintLog(url);
+    kPrintLog(body);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('jwt_token');
+    bool connected = await kInternetCheck();
+    if (!connected) {
+      return failure(Strings.internetError);
+    }
+    try {
+      var response = await http.put(
         Uri.parse(url!),
         headers: {
           "Content-Type": "application/json",
@@ -345,56 +426,50 @@ class ApiUtil {
     }
   }
 
-  static Future postApiWithMultipart({
-    required String? url,
-    required Function success,
-    required failure,
-    required File file,
-  }) async {
-    kPrintLog(url);
+  // static Future postApiWithMultipart({
+  //   required String? url,
+  //   required Function success,
+  //   required failure,
+  //   required File file,
+  // }) async {
+  //   kPrintLog(url);
 
-    bool connected = await hasInternetConnection();
-    if (!connected) {
-      return failure(Strings.internetError);
-    }
-    try {
-      var request = http.MultipartRequest('POST', Uri.parse(url!));
+  //   bool connected = await hasInternetConnection();
+  //   if (!connected) {
+  //     return failure(Strings.internetError);
+  //   }
+  //   try {
+  //     var request = http.MultipartRequest('POST', Uri.parse(url!));
 
-      request.headers.addAll({"Content-Type": "application/json"});
+  //     request.headers.addAll({"Content-Type": "application/json"});
 
-      request.files.add(
-        http.MultipartFile.fromBytes(
-          "file",
-          File(file.path).readAsBytesSync(),
-          filename: file.path.split("/").last,
-        ),
-      );
+  //     request.files.add(
+  //       http.MultipartFile.fromBytes(
+  //         "file",
+  //         File(file.path).readAsBytesSync(),
+  //         filename: file.path.split("/").last,
+  //       ),
+  //     );
 
-      var streamResponse = await request.send();
-      var response = await http.Response.fromStream(streamResponse);
-      Future.delayed(Duration(seconds: 5), () {});
-      kPrintLog("StatusCode:${response.statusCode}");
+  //     var streamResponse = await request.send();
+  //     var response = await http.Response.fromStream(streamResponse);
+  //     Future.delayed(Duration(seconds: 5), () {});
+  //     kPrintLog("StatusCode:${response.statusCode}");
 
-      kPrintLog('Response:${response.body}');
-      statusCode = response.statusCode;
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        return success(response);
-      } else if (response.statusCode == 302) {
-        return failure("Session Expired");
-      } else {
-        var decoded = jsonDecode(response.body);
-        // BaseResponse res = BaseResponse.fromJson(decoded, (data) => null);
-        /* if(res.statusCode! == 401){
-          return failure(Strings.errorMessage401?? "");
-        }
-        else{*/
-        // return failure(res.message ?? ""); /*}*/
-      }
-    } on Exception catch (e) {
-      kPrintLog("Exception:${e.toString()}");
-      return failure(Strings.defaultExceptionMessage);
-    }
-  }
+  //     kPrintLog('Response:${response.body}');
+  //     statusCode = response.statusCode;
+  //     if (response.statusCode == 200 || response.statusCode == 201) {
+  //       return success(response);
+  //     } else if (response.statusCode == 302) {
+  //       return failure("Session Expired");
+  //     } else {
+  //       var decoded = jsonDecode(response.body);
+  //     }
+  //   } on Exception catch (e) {
+  //     kPrintLog("Exception:${e.toString()}");
+  //     return failure(Strings.defaultExceptionMessage);
+  //   }
+  // }
 
   static Future postApiWithMultipartFile({
     required String? url,
@@ -410,7 +485,7 @@ class ApiUtil {
       return failure(Strings.internetError);
     }
     try {
-      var request = http.MultipartRequest('POST', Uri.parse(url!));
+      var request = http.MultipartRequest('POST', Uri.parse(url ?? ''));
 
       request.fields['photo[]'] = 'fileList';
 
