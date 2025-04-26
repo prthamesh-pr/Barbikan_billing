@@ -2,13 +2,10 @@
 import 'package:billing_web/features/user_access/view/create_user_view.dart';
 import 'package:billing_web/features/user_access/viewModel/userAccess_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
-
 import '../../utils/Strings.dart';
 import '../../utils/on_init.dart';
 import 'edit_user_view.dart';
-
 class UserAndAccessView extends StatefulWidget {
   const UserAndAccessView({super.key});
 
@@ -22,7 +19,9 @@ class _UserAndAccessViewState extends State<UserAndAccessView> with OnInit{
   //   {'sno': 2, 'name': 'Jane Smith', 'role': 'Staff', 'mobile': '9876543211'},
   //   {'sno': 3, 'name': 'Mark Taylor', 'role': 'Admin', 'mobile': '9876543212'},
   // ];
-  
+ // String? accType = "staff";
+
+
   @override
   Widget build(BuildContext context) {
     return Consumer<UserAccessProvider>(
@@ -67,7 +66,7 @@ class _UserAndAccessViewState extends State<UserAndAccessView> with OnInit{
   onTap: () {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => const CreateNewUserView(),
+        builder: (context) => const CreateNewUser(),
       ),
     );
   },
@@ -118,86 +117,150 @@ class _UserAndAccessViewState extends State<UserAndAccessView> with OnInit{
     }
   }
 
+  Widget _buildMobileList(BuildContext context) {
+    return Consumer<UserAccessProvider>(
+        builder: (context, controller, child) {
+          return Column(
+              children:[
+                ListView.builder(
+                  //  controller: listScrollController,
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount:controller.userAccessList.length,
+                    itemBuilder: (context, index){
+                      final user = controller.userAccessList[index];
+                      return  Card(
+                        color: Colors.white,
+                        margin: const EdgeInsets.only(bottom: 10),
+                        child: Padding(
+                          padding: const EdgeInsets.all(12),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'S.NO:',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 8.0),
+                                    child: Text(
+                                      '#${index + 1}',
+                                      style: TextStyle(
+                                        color: Colors.grey[600],
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ),
+
+                                ],
+                              ),
+
+                              _buildRow('Name:', user.username ?? ''),
+                              _buildRow('Role:', user.accountType == 'admin' ? 'Admin' : 'Staff'),
+                              _buildRow('Mobile No.:', user.mobileNumber ?? ''),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 4),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+
+                                    GestureDetector(
+                                      onTapDown: (TapDownDetails details) async {
+                                        final RenderBox overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
+
+                                        await showMenu(
+                                          context: context,
+                                          position: RelativeRect.fromRect(
+                                            details.globalPosition & const Size(40, 40), // position where the menu will appear
+                                            Offset.zero & overlay.size,
+                                          ),
+                                          color: Colors.white, // Background color
+                                          //elevation: 0,
+                                          items: [
+                                            PopupMenuItem(
+                                              value: 'edit',
+                                              child: Row(
+                                                children: const [
+                                                  Icon(Icons.edit, color: Colors.black),
+                                                  SizedBox(width: 8),
+                                                  Text('Edit'),
+                                                ],
+                                              ),
+                                            ),
+                                            PopupMenuItem(
+                                              value: 'delete',
+                                              child: Row(
+                                                children: const [
+                                                  Icon(Icons.delete,),
+                                                  SizedBox(width: 8),
+                                                  Text('Delete'),
+                                                ],
+                                              ),
+                                            ),
+
+                                          ],
+                                          //  color: Colors.transparent,
+                                        ).then((value) {
+                                          if (value == 'edit') {
+                                            // Handle Edit
+                                            print('Edit Clicked');
+                                          } else if (value == 'delete') {
+                                          }
+                                        });
+                                      },
+                                      child: Icon(Icons.more_horiz),
+                                    )
+                                  ],
+                                ),
+                              ),
+
+
+                            ],
+                          ),
+                        ),
+                      );
+                    }
+                )
+              ]
+          );
+        }
+    );
+  }
+
+  Widget _buildRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Text(label, style: TextStyle( color: Colors.grey[600],fontSize: 16)),
+          Text(value, style: TextStyle( fontWeight: FontWeight.w500)),
+        ],
+      ),
+    );
+  }
   Widget _buildDataTable(BuildContext context, BoxConstraints constraints, bool isSmallScreen) {
     return Consumer<UserAccessProvider>(
       builder: (context, controller, child) {
         return
-          controller.isLoading?Center(child: CircularProgressIndicator(
+          controller.isLoading?Center(
+              child: CircularProgressIndicator(
             color: Colors.orange,
-
           )):
           Container(
           decoration: BoxDecoration(
-            color: Colors.white,
+
             borderRadius: BorderRadius.circular(10),
           ),
           width: double.infinity,
-          child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: ConstrainedBox(
-              constraints: BoxConstraints(minWidth: constraints.maxWidth - (isSmallScreen ? 16 : 30)),
-              child: DataTable(
-                columnSpacing: isSmallScreen ? 10.0 : 20.0,
-                horizontalMargin: isSmallScreen ? 10.0 : 20.0,
-                headingTextStyle: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: isSmallScreen ? 12 : 14,
-                ),
-                dataTextStyle: TextStyle(
-                  fontSize: isSmallScreen ? 11 : 13,
-                ),
-                columns: [
-                  DataColumn(label: Text('S.NO')),
-                  DataColumn(label: Text('Name')),
-                  DataColumn(label: Text('Role')),
-                  DataColumn(label: Text('Mobile Number')),
-                  DataColumn(label: Text('Action')),
-                ],
-                rows: controller.userAccessList.asMap().entries.map((entry) {
-                  int index = entry.key;
-                 var staff = entry.value;
+          child: _buildMobileList(context),
 
-                  return DataRow(
-                    cells: [
-                      DataCell(Text('${index + 1}')),
-                      DataCell(Text(staff.username??""
-                          )),
-                      DataCell(Text(staff.accountType ?? '')),
-                      DataCell(Text(staff.mobileNumber ?? '')),
-
-                      //  DataCell(Text(controller.userAccessList[index].)),
-                      DataCell(
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            IconButton(
-                              color: Colors.blue,
-                              icon: Icon(Iconsax.edit, size: isSmallScreen ? 16 : 20),
-                              onPressed: () {
-                                controller.loadUserData(staff);
-                                Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (context) => EditUserView(),
-                                    ));
-                              },
-                            ),
-                            IconButton(
-                              color: Colors.red,
-                              icon: Icon(Iconsax.trash, size: isSmallScreen ? 16 : 20),
-                              onPressed: () {
-                                // Handle delete
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  );
-                }).toList(),
-
-              ),
-            ),
-          ),
         );
       }
     );

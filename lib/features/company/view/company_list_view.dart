@@ -1,8 +1,12 @@
 import 'package:billing_web/features/company/view/update_company_view.dart';
+import 'package:billing_web/features/company/viewModels/companyProvider.dart';
 import 'package:billing_web/features/config.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:billing_web/features/company/view/add_new_company.dart';
+import 'package:provider/provider.dart';
+
+import '../../utils/on_init.dart';
 
 class CompanyListView extends StatefulWidget {
   const CompanyListView({super.key});
@@ -11,27 +15,8 @@ class CompanyListView extends StatefulWidget {
   State<CompanyListView> createState() => _CompanyListViewState();
 }
 
-class _CompanyListViewState extends State<CompanyListView> {
-  final List<Map<String, dynamic>> companyList = [
-    {
-      'sno': 1,
-      'companyName': 'ABC Pvt Ltd',
-      'gst': '29ABCDE1234F1Z5',
-      'mobile': '9876543210',
-    },
-    {
-      'sno': 2,
-      'companyName': 'XYZ Corp',
-      'gst': '27XYZDE5678G1Z3',
-      'mobile': '9876543211',
-    },
-    {
-      'sno': 3,
-      'companyName': 'LMN Ltd',
-      'gst': '30LMNDE9101H1Z7',
-      'mobile': '9876543212',
-    },
-  ];
+class _CompanyListViewState extends State<CompanyListView>with OnInit {
+
 
   @override
   Widget build(BuildContext context) {
@@ -40,17 +25,17 @@ class _CompanyListViewState extends State<CompanyListView> {
         // Determine if we're on a mobile device
         final isMobile = constraints.maxWidth < 600;
         final isTablet = constraints.maxWidth >= 600 && constraints.maxWidth < 900;
-        
+
         return ListView(
           padding: EdgeInsets.all(isMobile ? 10 : 15),
           children: [
             // Header section
             _buildHeader(context, isMobile),
-            
+
             SizedBox(height: isMobile ? 10 : 15),
-            
+
             // Main content
-            isMobile 
+            isMobile
                 ? _buildMobileList(context)
                 : _buildDataTable(context, isTablet),
           ],
@@ -58,7 +43,6 @@ class _CompanyListViewState extends State<CompanyListView> {
       },
     );
   }
-
   Widget _buildHeader(BuildContext context, bool isMobile) {
     return SizedBox(
       width: double.infinity,
@@ -100,7 +84,6 @@ class _CompanyListViewState extends State<CompanyListView> {
             ),
     );
   }
-
  Widget _buildAddButton(BuildContext context) {
   return InkWell(
     onTap: () {
@@ -140,146 +123,203 @@ class _CompanyListViewState extends State<CompanyListView> {
     ),
   );
 }
+
   Widget _buildDataTable(BuildContext context, bool isTablet) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.red,
-        borderRadius: BorderRadius.circular(10),
-      ),
-      width: double.infinity,
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: ConstrainedBox(
-          constraints: BoxConstraints(
-            minWidth: MediaQuery.of(context).size.width - 30,
+    return Consumer<CompanyProvider>(
+      builder: (context, controller, child) {
+        if (controller.isLoading) {
+          return Center(child: CircularProgressIndicator(color: Colors.orange));
+        } else if (controller.listOfCompany.isEmpty) {
+          return Center(child: Text('No companies found.'));
+        }
+         return Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
           ),
-          child: DataTable(
-            columnSpacing: isTablet ? 15.0 : 20.0,
-            horizontalMargin: isTablet ? 10.0 : 20.0,
-            columns: [
-              DataColumn(label: Text('S.NO', style: TextStyle(fontWeight: FontWeight.bold))),
-              DataColumn(label: Text('Company Name', style: TextStyle(fontWeight: FontWeight.bold))),
-              DataColumn(label: Text('GST Number', style: TextStyle(fontWeight: FontWeight.bold))),
-              DataColumn(label: Text('Mobile Number', style: TextStyle(fontWeight: FontWeight.bold))),
-              DataColumn(label: Text('Action', style: TextStyle(fontWeight: FontWeight.bold))),
-            ],
-            rows: companyList.map((company) {
-              return DataRow(
-                cells: [
-                  DataCell(Text(company['sno'].toString())),
-                  DataCell(Text(company['companyName'])),
-                  DataCell(Text(company['gst'])),
-                  DataCell(Text(company['mobile'])),
-                  DataCell(
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        IconButton(
-                          color: Colors.blue,
-                          icon: Icon(Iconsax.edit, size: isTablet ? 18 : 24),
-                          onPressed: () {
-                            creationPageConfig.changePage(
-                              UpdateCompanyView(),
-                            );
-                            scaffoldKey.currentState!.openEndDrawer();
-                          },
-                        ),
-                        IconButton(
-                          color: Colors.red,
-                          icon: Icon(Iconsax.trash, size: isTablet ? 18 : 24),
-                          onPressed: () {
-                            // Handle delete action
-                          },
+          width: double.infinity,
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minWidth: MediaQuery.of(context).size.width - 30,
+              ),
+
+              child: DataTable(
+                columnSpacing: isTablet ? 15.0 : 20.0,
+                horizontalMargin: isTablet ? 10.0 : 20.0,
+                columns: [
+                  DataColumn(label: Text('S.NO', style: TextStyle(fontWeight: FontWeight.bold))),
+                  DataColumn(label: Text('Company Name', style: TextStyle(fontWeight: FontWeight.bold))),
+                  DataColumn(label: Text('GST Number', style: TextStyle(fontWeight: FontWeight.bold))),
+                  DataColumn(label: Text('Mobile Number', style: TextStyle(fontWeight: FontWeight.bold))),
+                //  DataColumn(label: Text('Action', style: TextStyle(fontWeight: FontWeight.bold))),
+                ],
+                rows: List<DataRow>.generate(
+                  controller.listOfCompany.length,
+                      (index) {
+                    final user = controller.listOfCompany[index];
+                    return DataRow(
+                      cells: [
+                       // DataCell(Text(user.['sno'].toString())),
+                        DataCell(Text((index + 1).toString())),
+                        DataCell(Text(user.companyName.toString())),
+                        DataCell(Text(user.gstNumber.toString())),
+                        DataCell(Text(user.mobileNumber.toString())),
+                        DataCell(
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              IconButton(
+                                color: Colors.blue,
+                                icon: Icon(Iconsax.edit, size: isTablet ? 18 : 24),
+                                onPressed: () {
+
+                                  // controller.loadUserData(company); // if you have this
+                                   creationPageConfig.changePage(UpdateCompanyView());
+                                   scaffoldKey.currentState!.openEndDrawer();
+                                },
+                              ),
+                              IconButton(
+                                color: Colors.red,
+                                icon: Icon(Iconsax.trash, size: isTablet ? 18 : 24),
+                                onPressed: () {
+                                //  controller.deleteCompanyBySno(company['sno']); // if you have this method
+                                },
+                              ),
+                            ],
+                          ),
                         ),
                       ],
-                    ),
-                  ),
-                ],
-              );
-            }).toList(),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildMobileList(BuildContext context) {
-    return Column(
-      children: companyList.map((company) {
-        return Card(
-            color: Colors.white,
-          margin: const EdgeInsets.only(bottom: 10),
-          child: Padding(
-            padding: const EdgeInsets.all(12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: Text(
-                        company['companyName'],
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                    Text(
-                      '#${company['sno']}',
-                      style: TextStyle(
-                        color: Colors.grey[600],
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ],
+                    );
+                  },
                 ),
-                const SizedBox(height: 8),
-                _buildInfoRow('GST:', company['gst']),
-                _buildInfoRow('Mobile:', company['mobile']),
-                const SizedBox(height: 8),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    ElevatedButton.icon(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue,
-                        foregroundColor: Colors.white,
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                      ),
-                      icon: const Icon(Iconsax.edit, size: 16),
-                      label: const Text('Edit'),
-                      onPressed: () {
-                        creationPageConfig.changePage(
-                          UpdateCompanyView(),
-                        );
-                        scaffoldKey.currentState!.openEndDrawer();
-                      },
-                    ),
-                    const SizedBox(width: 8),
-                    ElevatedButton.icon(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red,
-                        foregroundColor: Colors.white,
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                      ),
-                      icon: const Icon(Iconsax.trash, size: 16),
-                      label: const Text('Delete'),
-                      onPressed: () {
-                        // Handle delete action
-                      },
-                    ),
-                  ],
-                ),
-              ],
+              ),
             ),
           ),
         );
-      }).toList(),
+      },
     );
   }
+  Widget _buildMobileList(BuildContext context) {
+    return Consumer<CompanyProvider>(
+        builder: (context, controller, child) {
+          // if (controller.isLoading) {
+          //   return Center(child: CircularProgressIndicator(color: Colors.orange));
+          // } else if (controller.listOfCompany.isEmpty) {
+          //   return Center(child: Text('No companies found.'));
+          // }
+        return Column(
+          children:[
+         // companyList.map((company) {
+          ListView.builder(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              itemCount:controller.listOfCompany.length,
+          itemBuilder: (context, index) {
+            final user = controller.listOfCompany[index];
+            return Card(
+              color: Colors.white,
+              margin: const EdgeInsets.only(bottom: 10),
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            user.companyName!,
+                           // 'Company name',
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        Text(
+                          '#${index + 1}',
+                          style: TextStyle(
+                            color: Colors.grey[600],
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    _buildInfoRow('GST:', user.gstNumber!),
+                    _buildInfoRow('Mobile:', user.mobileNumber!),
+                    // _buildInfoRow('FSSAI:', user.fssaiNumber!),
+                    // _buildInfoRow('Email:', user.email!),
+                    // _buildInfoRow('Bill Prefix:', user.email!),
+                    // _buildInfoRow('Address:', user.billingAddress!),
+                    // _buildInfoRow('City:', user.city!),
+                    // _buildInfoRow('state:', user.state!),
+                    // _buildInfoRow('Bank Name:', user.bankName!),
+                    // _buildInfoRow('Account no:', user.accountNumber!),
+                    // _buildInfoRow('Ifsc Code:', user.ifscCode!),
+
+                    const SizedBox(height: 8),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+
+                        GestureDetector(
+                          onTapDown: (TapDownDetails details) async {
+                            final RenderBox overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
+
+                            await showMenu(
+                              context: context,
+                              position: RelativeRect.fromRect(
+                                details.globalPosition & const Size(40, 40), // position where the menu will appear
+                                Offset.zero & overlay.size,
+                              ),
+                              color: Colors.white, // Background color
+                              //elevation: 0,
+                              items: [
+                                PopupMenuItem(
+                                  value: 'edit',
+                                  child: Row(
+                                    children: const [
+                                      Icon(Icons.edit, color: Colors.black),
+                                      SizedBox(width: 8),
+                                      Text('Edit'),
+                                    ],
+                                  ),
+                                ),
+                                PopupMenuItem(
+                                  value: 'delete',
+                                  child: Row(
+                                    children: const [
+                                      Icon(Icons.delete,),
+                                      SizedBox(width: 8),
+                                      Text('Delete'),
+                                    ],
+                                  ),
+                                ),
+
+                              ],
+                            //  color: Colors.transparent,
+                            ).then((value) {
+                              if (value == 'edit') {
+                                // Handle Edit
+                                print('Edit Clicked');
+                              } else if (value == 'delete') {
+                              }
+                            });
+                          },
+                          child: Icon(Icons.more_horiz),
+                        )
+
+                      ],
+                    ),
+                  ],),),);
+          })
+          ]);
+          }
+          );}
 
   Widget _buildInfoRow(String label, String value) {
     return Padding(
@@ -306,5 +346,11 @@ class _CompanyListViewState extends State<CompanyListView> {
         ],
       ),
     );
+  }
+
+  @override
+  void afterFirstLayout(BuildContext context) {
+    // TODO: implement afterFirstLayout
+    Provider.of<CompanyProvider>(context,listen: false).initState();
   }
 }

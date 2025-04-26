@@ -1,12 +1,11 @@
 import 'dart:convert';
-
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../landing_view.dart';
 import '../../utils/api_Utils.dart';
 import '../../utils/api_url.dart';
+import '../../utils/network_util.dart';
 import '../model/loginCredential.dart';
 import '../view/login_screen.dart';
 
@@ -107,6 +106,13 @@ class LoginProvider extends ChangeNotifier{
     Function? failure,
     required BuildContext context,
   }) async {
+    bool isConnected = await checkInternet();
+    if (!isConnected) {
+      errorMessage = "No internet connection.";
+      notifyListeners();
+      if (failure != null) failure(errorMessage);
+      return;
+    }
     Map<String, dynamic> body = {
       "mobile_number": emailController.text,
       "password": passController.text,
@@ -148,7 +154,7 @@ class LoginProvider extends ChangeNotifier{
 
         if (failure != null) failure(message);
       },
-      context: context,
+
 
     );
   }

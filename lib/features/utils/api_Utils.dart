@@ -13,7 +13,7 @@ import 'api_url.dart';
 
 
 class ApiUtil {
-  static final ApiUtil singleton = new ApiUtil._internal();
+  static final ApiUtil singleton = ApiUtil._internal();
   static Dio? dio;
 
   BaseOptions? options;
@@ -191,6 +191,15 @@ class ApiUtil {
       return failure(Strings.internetError);
     }
     try {
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString("jwt_token");
+      final headers = options?.headers ?? {};
+      if (token != null) {
+        headers["Authorization"] = "Bearer $token";
+      }
+      Options requestOptions = options ?? Options();
+      requestOptions = requestOptions.copyWith(headers: headers);
+
       Response response = await dio!.put(url,
           data: data,
           queryParameters: queryParameters,
@@ -209,7 +218,7 @@ class ApiUtil {
     required String body,
     required Function success,
     required failure,
-    required BuildContext context,
+   // required BuildContext context,
   }) async {
     kPrintLog(url);
     kPrintLog(body); SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -222,7 +231,7 @@ class ApiUtil {
       var response = await http.post(Uri.parse(url!),
           headers: {
             "Content-Type": "application/json",
-            "Authorization":"Bearer ${token}"
+            "Authorization":"Bearer $token"
           },
           body: body);
       Future.delayed(const Duration(seconds: 5), () {});
@@ -261,6 +270,63 @@ class ApiUtil {
       return failure(Strings.defaultExceptionMessage);
     }
   }
+  static Future postApiWithput({
+    required String? url,
+    required String body,
+    required Function success,
+    required failure,
+
+  }) async {
+    kPrintLog(url);
+    kPrintLog(body); SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('jwt_token');
+    bool connected = await kInternetCheck();
+    if (!connected) {
+      return failure(Strings.internetError);
+    }
+    try {
+      var response = await http.put(Uri.parse(url!),
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization":"Bearer $token"
+          },
+          body: body);
+      Future.delayed(const Duration(seconds: 5), () {});
+      kPrintLog("StatusCode:${response.statusCode}");
+      kPrintLog('Response:${response.body}');
+
+      statusCode = response.statusCode;
+
+      String responseBody = response.body;
+
+      responseBody = responseBody.replaceAll(RegExp(r'\{"d":null\}$'), '');
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        // if (response.body.contains('SessionTimeOut')) {
+        //   CustomToast().showCustomToast(
+        //     type: SnackBarType.error,
+        //     message: "SessionTimeOut",
+        //   );
+        //   AppFunctions().resetAllProviders(context);
+        //   NavigateToPage.pushNamedReplacement(context, LoginScreen.routeName);
+        // }
+        return success(responseBody);
+      } else if (response.statusCode == 302) {
+        return failure("Session Expired");
+      } else {
+        var decoded = jsonDecode(response.body);
+        BaseResponse res = BaseResponse.fromJson(decoded, (data) => null);
+        if(res.statusCode! == 401){
+          return failure("Invalid credentials");
+        }
+        //   else{
+        //   return failure(res.message ?? ""); /*}*/
+        // }
+      }}
+    on Exception catch (e) {
+      kPrintLog("Exception:${e.toString()}");
+      return failure(Strings.defaultExceptionMessage);
+    }
+  }
 
   static int statusCode = 200;
 
@@ -277,7 +343,7 @@ class ApiUtil {
         Uri.parse(url),
         headers: {
           "Content-Type": "application/json",
-          "Authorization":"Bearer ${token}"
+          "Authorization":"Bearer $token"
         },
 
       );
@@ -360,7 +426,7 @@ class ApiUtil {
       return failure(Strings.internetError);
     }
     try {
-      var request = await http.MultipartRequest(
+      var request = http.MultipartRequest(
         'POST',
         Uri.parse(url!),
       );

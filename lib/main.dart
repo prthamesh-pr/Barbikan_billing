@@ -1,19 +1,26 @@
 
+import 'package:billing_web/features/company/viewModels/companyProvider.dart';
 import 'package:billing_web/features/user_access/viewModel/userAccess_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'features/Forgot_password/viewModel/RecoveryPassword_Provider.dart';
 import 'features/Log_In/view/login_screen.dart';
 import 'features/Log_In/viewModel/login_provider.dart';
+import 'features/utils/preference/preference.dart';
 
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  Pref.sharedPref = await SharedPreferences.getInstance();
+
   runApp(
       MultiProvider(
           providers: [
             ChangeNotifierProvider(create: (context) => LoginProvider()),
             ChangeNotifierProvider(create: (context) => RecoveryPasswordProvider()),
             ChangeNotifierProvider(create: (context) => UserAccessProvider()),
+            ChangeNotifierProvider(create: (context) => CompanyProvider()),
           //  ChangeNotifierProvider(create: (context) => FirstScreenProvider()),
           ],
           child: MyApp()));
