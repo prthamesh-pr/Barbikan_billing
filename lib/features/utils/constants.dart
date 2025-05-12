@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'dart:io';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/cupertino.dart';
 
 //final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -9,15 +10,14 @@ import 'package:flutter/cupertino.dart';
 kPrintLog(message) => log(message ?? "");
 
 Future<bool> kInternetCheck() async {
-  try {
-    final result = await InternetAddress.lookup('google.com');
-    if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-      return true;
-    }
-    return false;
-  } on Exception catch (_) {
+  var connectivityResult = await Connectivity().checkConnectivity();
+  if (connectivityResult == ConnectivityResult.none) {
     return false;
   }
+  return true;
+// } on Exception catch (_) {
+//     return false;
+//   }
 }
 
 EdgeInsets kPadding = EdgeInsets.symmetric(horizontal: 15, vertical:10);

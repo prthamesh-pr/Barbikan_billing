@@ -1,7 +1,9 @@
 
 import 'dart:convert';
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../utils/api_Utils.dart';
 import '../../utils/api_url.dart';
 import '../../utils/constants.dart';
@@ -93,14 +95,17 @@ String userid='';
 
 ///put api=======
   Future PutUsersUpdate({
-
   Function? success,
   Function? failure})
+
   async{
+    if (userid.isEmpty) {
+      return failure?.call("User ID is missing");
+    }
      if(passwordController.text.isEmpty){
        return "Please Enter Password";
      }
-    print('apiUrl${ApiUrl.userUpdate(id: userid)}');
+
 var body={
   //"id": controller., // make sure you have this stored or passed
   "username": usernameController.text.trim(),
@@ -112,9 +117,7 @@ if (kDebugMode) {
   print('apiUrl${ApiUrl.userUpdate(id: userid)}');
 }
     await ApiUtil.postApiWithput(
-
       url:ApiUrl.userUpdate(id: userid) ,
-
       body: jsonEncode(body),
 
          success: (source) async {
@@ -167,6 +170,40 @@ if (kDebugMode) {
         });
   }
 
+  /// Delete api==========
+  Future<void> deleteUsers(String id) async {
+    final Dio dio = Dio();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('jwt_token');
+
+    if (token == null) {
+      print('No token found!');
+      return;
+    }
+    print('https://billing-backend-l9z5.onrender.com/api/users/$id');
+    try {
+      final response = await dio.delete(
+        'https://billing-backend-l9z5.onrender.com/api/users/$id',
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+            'Content-Type': 'application/json',
+          },
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        print('Company deleted successfully');
+        getUserAccess();
+      } else {
+        print('Failed to delete company: ${response.statusCode}');
+      }
+    } on DioError catch (e) {
+      print('DioError: ${e.response?.statusCode} ${e.response?.data}');
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
 }
 
 

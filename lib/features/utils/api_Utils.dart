@@ -84,7 +84,7 @@ class ApiUtil {
 
   Future delete(
       {required url,
-        required data,
+       // required data,
         queryParameters,
         options,
         cancelToken,
@@ -95,9 +95,22 @@ class ApiUtil {
     if (!connected) {
       return failure(Strings.internetError);
     }
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('jwt_token');
+    if (token == null) {
+      return failure("No token available");
+    }
+
+    Options requestOptions = options ?? Options();
+    requestOptions.headers = {
+      'Authorization': 'Bearer $token',
+      'Content-Type': 'application/json',
+
+    };
+    print('header====${token}');
     try {
       Response response = await dio!.delete(url,
-          queryParameters: queryParameters, data: data, options: options, cancelToken: cancelToken ?? baseCancelToken);
+          queryParameters: queryParameters,  options: options, cancelToken: cancelToken ?? baseCancelToken);
       return success(jsonDecode(response.toString()));
     } on DioError catch (error) {
       return failure(formatError(error));
@@ -270,6 +283,7 @@ class ApiUtil {
       return failure(Strings.defaultExceptionMessage);
     }
   }
+
   static Future postApiWithput({
     required String? url,
     required String body,
@@ -334,6 +348,7 @@ class ApiUtil {
     kPrintLog(url);
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('jwt_token');
+
     bool connected = await kInternetCheck();
     if (!connected) {
       return failure(Strings.internetError);

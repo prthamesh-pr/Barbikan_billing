@@ -14,12 +14,7 @@ class UserAndAccessView extends StatefulWidget {
 }
 
 class _UserAndAccessViewState extends State<UserAndAccessView> with OnInit{
-  // final List<Map<String, dynamic>> staffList = [
-  //   {'sno': 1, 'name': 'John Doe', 'role': 'Admin', 'mobile': '9876543210'},
-  //   {'sno': 2, 'name': 'Jane Smith', 'role': 'Staff', 'mobile': '9876543211'},
-  //   {'sno': 3, 'name': 'Mark Taylor', 'role': 'Admin', 'mobile': '9876543212'},
-  // ];
- // String? accType = "staff";
+
 
 
   @override
@@ -167,21 +162,21 @@ class _UserAndAccessViewState extends State<UserAndAccessView> with OnInit{
                               Padding(
                                 padding: const EdgeInsets.symmetric(vertical: 4),
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
 
                                     GestureDetector(
                                       onTapDown: (TapDownDetails details) async {
                                         final RenderBox overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
 
-                                        await showMenu(
+                                        final value = await showMenu(
                                           context: context,
                                           position: RelativeRect.fromRect(
-                                            details.globalPosition & const Size(40, 40), // position where the menu will appear
+                                            details.globalPosition & const Size(40, 40),
                                             Offset.zero & overlay.size,
                                           ),
-                                          color: Colors.white, // Background color
-                                          //elevation: 0,
+
+                                          color: Colors.white,
                                           items: [
                                             PopupMenuItem(
                                               value: 'edit',
@@ -197,22 +192,50 @@ class _UserAndAccessViewState extends State<UserAndAccessView> with OnInit{
                                               value: 'delete',
                                               child: Row(
                                                 children: const [
-                                                  Icon(Icons.delete,),
+                                                  Icon(Icons.delete, color: Colors.black),
                                                   SizedBox(width: 8),
                                                   Text('Delete'),
                                                 ],
                                               ),
                                             ),
-
                                           ],
-                                          //  color: Colors.transparent,
-                                        ).then((value) {
-                                          if (value == 'edit') {
-                                            // Handle Edit
-                                            print('Edit Clicked');
-                                          } else if (value == 'delete') {
+                                        );
+
+                                        if (value == 'edit') {
+                                          // Handle Edit
+                                          print('Edit Clicked');
+                                          controller.loadUserData(user);
+                                          Navigator.push(context,
+                                              MaterialPageRoute(
+                                              builder: (context) => EditUserView()));
+                                        } else if (value == 'delete') {
+
+                                          bool confirmDelete = await showDialog(
+                                            context: context,
+                                            builder: (context) => AlertDialog(
+                                              backgroundColor: Colors.white,
+
+                                              title: Text('Confirm Delete'),
+                                              content: Text('Are you sure you want to delete this company?'),
+                                              actions: [
+                                                TextButton(
+                                                  onPressed: () => Navigator.pop(context, false),
+                                                  child: Text('Cancel'),
+                                                ),
+                                                TextButton(
+                                                  onPressed: () => Navigator.pop(context, true),
+                                                  child: Text('Delete', style: TextStyle(color: Colors.red)),
+                                                ),
+                                              ],
+                                            ),
+                                          );
+
+                                          if (confirmDelete == true) {
+                                            print("user.id!===${user.id!}");
+                                            await controller.deleteUsers(user.id!);
+
                                           }
-                                        });
+                                        }
                                       },
                                       child: Icon(Icons.more_horiz),
                                     )

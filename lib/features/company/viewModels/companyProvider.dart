@@ -1,6 +1,9 @@
 
 import 'dart:convert';
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../utils/api_Utils.dart';
 import '../../utils/api_url.dart';
 import '../../utils/constants.dart';
@@ -13,6 +16,31 @@ class CompanyProvider extends ChangeNotifier{
    List<Companies> listOfCompany = [];
 
    bool isLoading=false;
+
+   String userid='';
+   setUserId(String id){
+     userid=id;
+     notifyListeners();
+   }
+
+   void loadUserData(Companies user) {
+     companyNameController.text = user.companyName ?? '';
+     mobileController.text = user.mobileNumber ?? '';
+     userid=user.id!;
+     gstNumberController.clear();
+     fssaiNumberController.clear();
+     emailController.clear();
+     billPrefixController.clear();
+     billingAddressController.clear();
+     cityNameController.clear();
+     stateNameController.clear();
+     bankNameController.clear();
+     accountNumberController.clear();
+     ifscCodeController.clear();
+     upiNumberController.clear();
+     // accType = user.accountType ?? 'staff';
+     notifyListeners();
+   }
 
    final TextEditingController companyNameController = TextEditingController();
    final TextEditingController mobileController = TextEditingController();
@@ -42,8 +70,8 @@ class CompanyProvider extends ChangeNotifier{
      accountNumberController.clear();
      ifscCodeController.clear();
      upiNumberController.clear();
-    // getCompanyList();
-     newCompany();
+     getCompanyList();
+
    }
 
 ///post api================
@@ -97,7 +125,6 @@ class CompanyProvider extends ChangeNotifier{
 
   ///get api===============
    Future<void> getCompanyList() async {
-
      isLoading=true;
      notifyListeners();
      await ApiUtil.getApi(
@@ -129,14 +156,83 @@ class CompanyProvider extends ChangeNotifier{
 
    }
 
-   ///Delete api============
 
-   // Future<void> deleteCompany()async{
-   //
-   //   await ApiUtil().delete(
-   //       url: ApiUrl.,
-   //       data: data,
-   //       success: success,
-   //       failure: failure)
-   // }
+
+
+   Future putCompanyUpdate({
+     Function? success,
+     Function? failure})
+
+   async{
+
+     var body={
+       //"id": controller., // make sure you have this stored or passed
+       "company_name" : companyNameController.text.trim(),
+       "mobile_number":mobileController.text.trim(),
+       "gst_number":gstNumberController.text.trim(),
+       "fssai_number":fssaiNumberController.text.trim(),
+       "email":emailController.text.trim(),
+       "bill_prefix":billPrefixController.text.trim(),
+       "billing_address":billingAddressController.text.trim(),
+       "city":cityNameController.text.trim(),
+       "state":stateNameController.text.trim(),
+       "bank_name":bankNameController.text.trim(),
+       "account_number":accountNumberController.text.trim(),
+       "ifsc_code":ifscCodeController.text.trim(),
+       "upi_number":upiNumberController.text.trim(),
+     };
+
+     await ApiUtil.postApiWithput(
+       url:ApiUrl.compnayUpdate(id: userid) ,
+       body: jsonEncode(body),
+
+       success: (source) async {
+         print(" Response: $source");
+         return success!();
+       },
+       failure: (errorMessage){
+         print('failuresss $errorMessage');
+         notifyListeners();
+         return failure!(errorMessage);
+       },
+
+     );
+   }
+
+
+   ///Delete api============
+   Future<void> deleteCompany(String id) async {
+     final Dio dio = Dio();
+     SharedPreferences prefs = await SharedPreferences.getInstance();
+     String? token = prefs.getString('jwt_token');
+
+     if (token == null) {
+       print('No token found!');
+       return;
+     }
+print("${  'https://billing-backend-l9z5.onrender.com/api/companies/$id'}");
+     try {
+       final response = await dio.delete(
+         'https://billing-backend-l9z5.onrender.com/api/companies/$id',
+         options: Options(
+           headers: {
+             'Authorization': 'Bearer $token',
+             'Content-Type': 'application/json',
+           },
+         ),
+       );
+
+       if (response.statusCode == 200) {
+         print('Company deleted successfully');
+         getCompanyList();
+       } else {
+         print('Failed to delete company: ${response.statusCode}');
+       }
+     } on DioError catch (e) {
+       print('DioError: ${e.response?.statusCode} ${e.response?.data}');
+     } catch (e) {
+       print('Error: $e');
+     }
+   }
+
 }

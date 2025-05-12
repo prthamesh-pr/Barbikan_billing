@@ -629,8 +629,6 @@ class _AddNewCompanyViewState extends State<AddNewCompanyView> with OnInit {
           await controller.newCompany(
 
           success: (){
-            // controller.isLoading = false;
-            // controller.notifyListeners();
           controller.companyNameController.clear();
           controller.mobileController.clear();
           controller.gstNumberController.clear();
@@ -652,17 +650,13 @@ class _AddNewCompanyViewState extends State<AddNewCompanyView> with OnInit {
           },
           failure: (message) {
 
-            // controller.isLoading = false;
-            // controller.notifyListeners();
-            // Handle failure: Show an error message
           ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Error: $message')),
           );
           }
           );
           }else {
-            // controller.isLoading = false;
-            // controller.notifyListeners();
+
           ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Please fill all required fields')),
           );

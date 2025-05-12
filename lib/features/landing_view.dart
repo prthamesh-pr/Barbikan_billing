@@ -1,18 +1,19 @@
+import 'package:billing_web/features/purchase_list/view/purchase_list_view.dart';
 import 'package:flutter/material.dart';
-import 'category/category_list_view.dart';
+import 'package:billing_web/PlayArea_Screens/dashBoard/view/dashBoard_screen.dart';
+import 'category/view/category_list_view.dart';
 import 'company/view/company_list_view.dart';
 import 'create_form/create_view.dart';
-import 'dashboard/dashboard_view.dart';
-import 'invoice/invoice_list_view.dart';
-import 'party/customer/customer_list_view.dart';
-import 'party/purchase_party/purchase_party_list_view.dart';
-import 'product/product_list_view.dart';
-import 'purchase/purchase_list_view.dart';
-import 'sidebar/menu_view.dart';
-import 'sidebar/sidebar_view.dart';
+import 'dashboard/view/dashboard_view.dart';
+import 'invoice/view/invoice_list_view.dart';
+import 'party/customer/view/customer_list_view.dart';
+import 'party/purchase_party/view/purchase_party_list_view.dart';
+import 'product/view/product_list_view.dart';
+import 'sidebar/CafetArea/view/menu_view.dart';
+import 'sidebar/CafetArea/view/sidebar_view.dart';
 import 'user_access/view/user_access_view.dart';
-import 'stock/stock_list.dart';
-import 'sales/sales_list.dart';
+import 'stock/view/stock_list.dart';
+import 'sales/view/sales_list.dart';
 
 class LandingView extends StatefulWidget {
   const LandingView({super.key});
@@ -140,7 +141,16 @@ class _LandingViewState extends State<LandingView> {
                 contentPadding: EdgeInsets.symmetric(horizontal: 15),
                 hintText: "Choose Company",
               ),
-              onChanged: (onChanged) {},
+              onChanged: (value) {
+                setState(() {
+                  currentCompany = value!;
+                });
+                if (value == 'play') {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => DashboardScreen()),
+                  );
+                }
+              },
             ),
           ),
           const SizedBox(width: 10),
@@ -149,7 +159,7 @@ class _LandingViewState extends State<LandingView> {
       drawer: isSmallScreen ? 
         Drawer(
           width: screenWidth * 0.75, // Set drawer width to 75% of screen
-          child: SideBarView(),
+          child: SideBarView(currentCompany: currentCompany),
         ) : null,
       body: Row(
         children: [
@@ -162,7 +172,7 @@ class _LandingViewState extends State<LandingView> {
               decoration: BoxDecoration(color: Colors.white),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [Expanded(child: SideBarView())],
+                children: [Expanded(child: SideBarView(currentCompany:currentCompany ,))],
               ),
             ),
           Expanded(

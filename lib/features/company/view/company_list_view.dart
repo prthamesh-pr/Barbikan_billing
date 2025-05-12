@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:billing_web/features/company/view/add_new_company.dart';
 import 'package:provider/provider.dart';
-
 import '../../utils/on_init.dart';
 
 class CompanyListView extends StatefulWidget {
@@ -20,27 +19,29 @@ class _CompanyListViewState extends State<CompanyListView>with OnInit {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        // Determine if we're on a mobile device
-        final isMobile = constraints.maxWidth < 600;
-        final isTablet = constraints.maxWidth >= 600 && constraints.maxWidth < 900;
-
-        return ListView(
-          padding: EdgeInsets.all(isMobile ? 10 : 15),
-          children: [
-            // Header section
-            _buildHeader(context, isMobile),
-
-            SizedBox(height: isMobile ? 10 : 15),
-
-            // Main content
-            isMobile
-                ? _buildMobileList(context)
-                : _buildDataTable(context, isTablet),
-          ],
-        );
-      },
+    return Scaffold(
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          // Determine if we're on a mobile device
+          final isMobile = constraints.maxWidth < 600;
+          final isTablet = constraints.maxWidth >= 600 && constraints.maxWidth < 900;
+      
+          return ListView(
+            padding: EdgeInsets.all(isMobile ? 10 : 15),
+            children: [
+              // Header section
+              _buildHeader(context, isMobile),
+      
+              SizedBox(height: isMobile ? 10 : 15),
+      
+              // Main content
+              isMobile
+                  ? _buildMobileList(context)
+                  : _buildDataTable(context, isTablet),
+            ],
+          );
+        },
+      ),
     );
   }
   Widget _buildHeader(BuildContext context, bool isMobile) {
@@ -85,40 +86,43 @@ class _CompanyListViewState extends State<CompanyListView>with OnInit {
     );
   }
  Widget _buildAddButton(BuildContext context) {
-  return InkWell(
-    onTap: () {
-      creationPageConfig.changePage(
-        const AddNewCompanyView(),
-      );
-      // Add null check to prevent null pointer exception
-      if (scaffoldKey.currentState != null) {
-        scaffoldKey.currentState!.openEndDrawer();
-      } else {
-        // Fallback navigation if scaffold key is null
-        Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => const AddNewCompanyView()),
+  return Material(
+    color: Colors.transparent,
+    child: InkWell(
+      onTap: () {
+        creationPageConfig.changePage(
+          const AddNewCompanyView(),
         );
-      }
-    },
-    child: Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 15,
-        vertical: 8,
-      ),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(100),
-        color: Theme.of(context).primaryColor,
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(Icons.add, color: Colors.white, size: 20),
-          const SizedBox(width: 10),
-          Text(
-            "Add New Company",
-            style: Theme.of(context).textTheme.labelLarge!.copyWith(color: Colors.white),
-          ),
-        ],
+        // Add null check to prevent null pointer exception
+        if (scaffoldKey.currentState != null) {
+          scaffoldKey.currentState!.openEndDrawer();
+        } else {
+          // Fallback navigation if scaffold key is null
+          Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => const AddNewCompanyView()),
+          );
+        }
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 15,
+          vertical: 8,
+        ),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(100),
+          color: Theme.of(context).primaryColor,
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.add, color: Colors.white, size: 20),
+            const SizedBox(width: 10),
+            Text(
+              "Add New Company",
+              style: Theme.of(context).textTheme.labelLarge!.copyWith(color: Colors.white),
+            ),
+          ],
+        ),
       ),
     ),
   );
@@ -127,12 +131,11 @@ class _CompanyListViewState extends State<CompanyListView>with OnInit {
   Widget _buildDataTable(BuildContext context, bool isTablet) {
     return Consumer<CompanyProvider>(
       builder: (context, controller, child) {
-        if (controller.isLoading) {
-          return Center(child: CircularProgressIndicator(color: Colors.orange));
-        } else if (controller.listOfCompany.isEmpty) {
-          return Center(child: Text('No companies found.'));
-        }
-         return Container(
+         return  controller.isLoading?Center(
+             child: CircularProgressIndicator(
+               color: Colors.orange,
+             )):
+           Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
           ),
@@ -263,21 +266,20 @@ class _CompanyListViewState extends State<CompanyListView>with OnInit {
 
                     const SizedBox(height: 8),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
+                     mainAxisAlignment: MainAxisAlignment.end,
                       children: [
 
                         GestureDetector(
                           onTapDown: (TapDownDetails details) async {
                             final RenderBox overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
 
-                            await showMenu(
+                            final value = await showMenu(
                               context: context,
                               position: RelativeRect.fromRect(
-                                details.globalPosition & const Size(40, 40), // position where the menu will appear
+                                details.globalPosition & const Size(40, 40),
                                 Offset.zero & overlay.size,
                               ),
-                              color: Colors.white, // Background color
-                              //elevation: 0,
+                              color: Colors.white,
                               items: [
                                 PopupMenuItem(
                                   value: 'edit',
@@ -293,25 +295,54 @@ class _CompanyListViewState extends State<CompanyListView>with OnInit {
                                   value: 'delete',
                                   child: Row(
                                     children: const [
-                                      Icon(Icons.delete,),
+                                      Icon(Icons.delete, color: Colors.black),
                                       SizedBox(width: 8),
                                       Text('Delete'),
                                     ],
                                   ),
                                 ),
-
                               ],
-                            //  color: Colors.transparent,
-                            ).then((value) {
-                              if (value == 'edit') {
-                                // Handle Edit
-                                print('Edit Clicked');
-                              } else if (value == 'delete') {
+                            );
+
+                            if (value == 'edit') {
+                              // Handle Edit
+                              print('Edit Clicked');
+                              controller.loadUserData(user);
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => UpdateCompanyView()));
+                            } else if (value == 'delete') {
+
+                              bool confirmDelete = await showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  backgroundColor: Colors.white,
+                                  title: Text('Confirm Delete'),
+                                  content: Text('Are you sure you want to delete this company?'),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () => Navigator.pop(context, false),
+                                      child: Text('Cancel'),
+                                    ),
+                                    TextButton(
+                                      onPressed: () => Navigator.pop(context, true),
+                                      child: Text('Delete', style: TextStyle(color: Colors.red)),
+                                    ),
+                                  ],
+                                ),
+                              );
+
+                              if (confirmDelete == true) {
+                                print("user.id!===${user.id!}");
+                                await controller.deleteCompany(user.id!);
+
                               }
-                            });
+                            }
                           },
                           child: Icon(Icons.more_horiz),
                         )
+
 
                       ],
                     ),

@@ -207,7 +207,9 @@ class _EditUserViewState extends State<EditUserView> {
                       context: context,
                       label: "Update",
                       onTap: () async {
-                        if (controller.passwordController.text.isEmpty){
+                        print("teeeeeeeeeeeeeeeeeee${controller.passwordController.text.length}");
+                        if (controller.passwordController.text.isEmpty || controller.passwordController.text.length < 8){
+                          print("ifffffffffffffffffffffffffff");
                           showDialog(
                             context: context,
                             builder: (BuildContext context) {
@@ -226,8 +228,8 @@ class _EditUserViewState extends State<EditUserView> {
                           return;
                         }
 
-
-                        await controller.PutUsersUpdate(
+                         else {
+                         await  controller.PutUsersUpdate(
 
                           success: () {
                             ScaffoldMessenger.of(context).showSnackBar(
@@ -243,6 +245,7 @@ class _EditUserViewState extends State<EditUserView> {
                             );
                           },
                         );
+                        }
                       },
 
                     ),
