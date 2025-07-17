@@ -1,6 +1,6 @@
+import 'package:barbikan/view/config.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:billing_web/view/config.dart';
 
 class AddNewCompanyView extends StatefulWidget {
   const AddNewCompanyView({super.key});
@@ -11,7 +11,7 @@ class AddNewCompanyView extends StatefulWidget {
 
 class _AddNewCompanyViewState extends State<AddNewCompanyView> {
   final _formKey = GlobalKey<FormState>();
-  
+
   // Form controllers
   final TextEditingController _companyNameController = TextEditingController();
   final TextEditingController _gstController = TextEditingController();
@@ -23,7 +23,8 @@ class _AddNewCompanyViewState extends State<AddNewCompanyView> {
   final TextEditingController _cityController = TextEditingController();
   final TextEditingController _stateController = TextEditingController();
   final TextEditingController _bankNameController = TextEditingController();
-  final TextEditingController _accountNumberController = TextEditingController();
+  final TextEditingController _accountNumberController =
+      TextEditingController();
   final TextEditingController _ifscCodeController = TextEditingController();
   final TextEditingController _upiNumberController = TextEditingController();
 
@@ -100,7 +101,7 @@ class _AddNewCompanyViewState extends State<AddNewCompanyView> {
             ),
           ),
           Divider(height: 0, color: Color(0xffEEEEEE)),
-          
+
           // Form content
           Expanded(
             child: Form(
@@ -111,10 +112,12 @@ class _AddNewCompanyViewState extends State<AddNewCompanyView> {
                   // General Information Section
                   Text(
                     "General Information",
-                    style: Theme.of(context).textTheme.labelLarge!.copyWith(fontWeight: FontWeight.bold),
+                    style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   const SizedBox(height: 10),
-                  
+
                   // Company Name and Mobile Number
                   Row(
                     children: [
@@ -140,7 +143,9 @@ class _AddNewCompanyViewState extends State<AddNewCompanyView> {
                                     borderRadius: BorderRadius.circular(10),
                                     borderSide: BorderSide.none,
                                   ),
-                                  contentPadding: EdgeInsets.symmetric(horizontal: 15),
+                                  contentPadding: EdgeInsets.symmetric(
+                                    horizontal: 15,
+                                  ),
                                   hintText: "Company Name",
                                 ),
                                 validator: (value) {
@@ -178,7 +183,9 @@ class _AddNewCompanyViewState extends State<AddNewCompanyView> {
                                     borderRadius: BorderRadius.circular(10),
                                     borderSide: BorderSide.none,
                                   ),
-                                  contentPadding: EdgeInsets.symmetric(horizontal: 15),
+                                  contentPadding: EdgeInsets.symmetric(
+                                    horizontal: 15,
+                                  ),
                                   hintText: "Contact Number",
                                 ),
                                 validator: (value) {
@@ -195,7 +202,7 @@ class _AddNewCompanyViewState extends State<AddNewCompanyView> {
                     ],
                   ),
                   SizedBox(height: 10),
-                  
+
                   // GST and FSSAI
                   Row(
                     children: [
@@ -221,7 +228,9 @@ class _AddNewCompanyViewState extends State<AddNewCompanyView> {
                                     borderRadius: BorderRadius.circular(10),
                                     borderSide: BorderSide.none,
                                   ),
-                                  contentPadding: EdgeInsets.symmetric(horizontal: 15),
+                                  contentPadding: EdgeInsets.symmetric(
+                                    horizontal: 15,
+                                  ),
                                   hintText: "GST Number",
                                 ),
                                 validator: (value) {
@@ -258,7 +267,9 @@ class _AddNewCompanyViewState extends State<AddNewCompanyView> {
                                     borderRadius: BorderRadius.circular(10),
                                     borderSide: BorderSide.none,
                                   ),
-                                  contentPadding: EdgeInsets.symmetric(horizontal: 15),
+                                  contentPadding: EdgeInsets.symmetric(
+                                    horizontal: 15,
+                                  ),
                                   hintText: "FSSAI Number",
                                 ),
                               ),
@@ -269,7 +280,7 @@ class _AddNewCompanyViewState extends State<AddNewCompanyView> {
                     ],
                   ),
                   SizedBox(height: 10),
-                  
+
                   // Email and Bill Prefix
                   Row(
                     children: [
@@ -296,7 +307,9 @@ class _AddNewCompanyViewState extends State<AddNewCompanyView> {
                                     borderRadius: BorderRadius.circular(10),
                                     borderSide: BorderSide.none,
                                   ),
-                                  contentPadding: EdgeInsets.symmetric(horizontal: 15),
+                                  contentPadding: EdgeInsets.symmetric(
+                                    horizontal: 15,
+                                  ),
                                   hintText: "Email Address",
                                 ),
                               ),
@@ -327,7 +340,9 @@ class _AddNewCompanyViewState extends State<AddNewCompanyView> {
                                     borderRadius: BorderRadius.circular(10),
                                     borderSide: BorderSide.none,
                                   ),
-                                  contentPadding: EdgeInsets.symmetric(horizontal: 15),
+                                  contentPadding: EdgeInsets.symmetric(
+                                    horizontal: 15,
+                                  ),
                                   hintText: "Bill Prefix",
                                 ),
                               ),
@@ -338,16 +353,18 @@ class _AddNewCompanyViewState extends State<AddNewCompanyView> {
                     ],
                   ),
                   SizedBox(height: 15),
-                  
+
                   // Billing Address Section
                   Divider(height: 0, color: Color(0xffEEEEEE)),
                   SizedBox(height: 10),
                   Text(
                     "Billing Address",
-                    style: Theme.of(context).textTheme.labelLarge!.copyWith(fontWeight: FontWeight.bold),
+                    style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   const SizedBox(height: 10),
-                  
+
                   // Address
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -378,7 +395,7 @@ class _AddNewCompanyViewState extends State<AddNewCompanyView> {
                     ],
                   ),
                   SizedBox(height: 10),
-                  
+
                   // City and State
                   Row(
                     children: [
@@ -404,7 +421,9 @@ class _AddNewCompanyViewState extends State<AddNewCompanyView> {
                                     borderRadius: BorderRadius.circular(10),
                                     borderSide: BorderSide.none,
                                   ),
-                                  contentPadding: EdgeInsets.symmetric(horizontal: 15),
+                                  contentPadding: EdgeInsets.symmetric(
+                                    horizontal: 15,
+                                  ),
                                   hintText: "City",
                                 ),
                               ),
@@ -435,7 +454,9 @@ class _AddNewCompanyViewState extends State<AddNewCompanyView> {
                                     borderRadius: BorderRadius.circular(10),
                                     borderSide: BorderSide.none,
                                   ),
-                                  contentPadding: EdgeInsets.symmetric(horizontal: 15),
+                                  contentPadding: EdgeInsets.symmetric(
+                                    horizontal: 15,
+                                  ),
                                   hintText: "State",
                                 ),
                               ),
@@ -446,16 +467,18 @@ class _AddNewCompanyViewState extends State<AddNewCompanyView> {
                     ],
                   ),
                   SizedBox(height: 15),
-                  
+
                   // Bank Details Section
                   Divider(height: 0, color: Color(0xffEEEEEE)),
                   SizedBox(height: 10),
                   Text(
                     "Bank Details (Optional)",
-                    style: Theme.of(context).textTheme.labelLarge!.copyWith(fontWeight: FontWeight.bold),
+                    style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   const SizedBox(height: 10),
-                  
+
                   // Bank Name and Account Number
                   Row(
                     children: [
@@ -481,7 +504,9 @@ class _AddNewCompanyViewState extends State<AddNewCompanyView> {
                                     borderRadius: BorderRadius.circular(10),
                                     borderSide: BorderSide.none,
                                   ),
-                                  contentPadding: EdgeInsets.symmetric(horizontal: 15),
+                                  contentPadding: EdgeInsets.symmetric(
+                                    horizontal: 15,
+                                  ),
                                   hintText: "Bank Name",
                                 ),
                               ),
@@ -512,7 +537,9 @@ class _AddNewCompanyViewState extends State<AddNewCompanyView> {
                                     borderRadius: BorderRadius.circular(10),
                                     borderSide: BorderSide.none,
                                   ),
-                                  contentPadding: EdgeInsets.symmetric(horizontal: 15),
+                                  contentPadding: EdgeInsets.symmetric(
+                                    horizontal: 15,
+                                  ),
                                   hintText: "Account Number",
                                 ),
                               ),
@@ -523,7 +550,7 @@ class _AddNewCompanyViewState extends State<AddNewCompanyView> {
                     ],
                   ),
                   SizedBox(height: 10),
-                  
+
                   // IFSC and UPI
                   Row(
                     children: [
@@ -542,14 +569,19 @@ class _AddNewCompanyViewState extends State<AddNewCompanyView> {
                                 controller: _ifscCodeController,
                                 cursorHeight: 20,
                                 decoration: InputDecoration(
-                                  prefixIcon: Icon(Iconsax.money_recive, size: 18),
+                                  prefixIcon: Icon(
+                                    Iconsax.money_recive,
+                                    size: 18,
+                                  ),
                                   filled: true,
                                   fillColor: Color(0xffEEEEEE),
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(10),
                                     borderSide: BorderSide.none,
                                   ),
-                                  contentPadding: EdgeInsets.symmetric(horizontal: 15),
+                                  contentPadding: EdgeInsets.symmetric(
+                                    horizontal: 15,
+                                  ),
                                   hintText: "IFSC Code",
                                 ),
                               ),
@@ -573,14 +605,19 @@ class _AddNewCompanyViewState extends State<AddNewCompanyView> {
                                 controller: _upiNumberController,
                                 cursorHeight: 20,
                                 decoration: InputDecoration(
-                                  prefixIcon: Icon(Iconsax.receipt_item, size: 18),
+                                  prefixIcon: Icon(
+                                    Iconsax.receipt_item,
+                                    size: 18,
+                                  ),
                                   filled: true,
                                   fillColor: Color(0xffEEEEEE),
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(10),
                                     borderSide: BorderSide.none,
                                   ),
-                                  contentPadding: EdgeInsets.symmetric(horizontal: 15),
+                                  contentPadding: EdgeInsets.symmetric(
+                                    horizontal: 15,
+                                  ),
                                   hintText: "UPI Number",
                                 ),
                               ),
@@ -594,7 +631,7 @@ class _AddNewCompanyViewState extends State<AddNewCompanyView> {
               ),
             ),
           ),
-          
+
           // Action Buttons
           Container(
             padding: const EdgeInsets.all(10),
@@ -617,9 +654,8 @@ class _AddNewCompanyViewState extends State<AddNewCompanyView> {
                       children: [
                         Text(
                           "Cancel",
-                          style: Theme.of(context).textTheme.labelLarge!.copyWith(
-                            color: Colors.grey.shade600,
-                          ),
+                          style: Theme.of(context).textTheme.labelLarge!
+                              .copyWith(color: Colors.grey.shade600),
                         ),
                       ],
                     ),
@@ -632,9 +668,11 @@ class _AddNewCompanyViewState extends State<AddNewCompanyView> {
                       // Save company data
                       // Show success message
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Company added successfully')),
+                        const SnackBar(
+                          content: Text('Company added successfully'),
+                        ),
                       );
-                      
+
                       // Close the form with safer navigation
                       _navigateBack();
                     }
@@ -653,9 +691,9 @@ class _AddNewCompanyViewState extends State<AddNewCompanyView> {
                       children: [
                         Text(
                           "Add Company",
-                          style: Theme.of(context).textTheme.labelLarge!.copyWith(
-                            color: Colors.white,
-                          ),
+                          style: Theme.of(
+                            context,
+                          ).textTheme.labelLarge!.copyWith(color: Colors.white),
                         ),
                       ],
                     ),

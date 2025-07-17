@@ -1,19 +1,19 @@
+import 'package:barbikan/view/create_form/create_view.dart';
 import 'package:flutter/material.dart';
 
 import 'category/category_list_view.dart';
 import 'company/company_list_view.dart';
-import 'create_form/create_view.dart';
 import 'dashboard/dashboard_view.dart';
 import 'invoice/invoice_list_view.dart';
 import 'party/customer/customer_list_view.dart';
 import 'party/purchase_party/purchase_party_list_view.dart';
 import 'product/product_list_view.dart';
 import 'purchase/purchase_list_view.dart';
+import 'sales/sales_list.dart';
 import 'sidebar/menu_view.dart';
 import 'sidebar/sidebar_view.dart';
-import 'user_access/user_access_view.dart';
 import 'stock/stock_list.dart';
-import 'sales/sales_list.dart';
+import 'user_access/user_access_view.dart';
 
 class LandingView extends StatefulWidget {
   const LandingView({super.key});
@@ -26,7 +26,7 @@ class _LandingViewState extends State<LandingView> {
   String currentCompany = "cafeteria";
   bool _isSidebarVisible = true; // Track sidebar visibility
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-  
+
   List<Widget> pageList = const [
     DashboardView(),
     UserAndAccessView(),
@@ -49,8 +49,8 @@ class _LandingViewState extends State<LandingView> {
 
   void _toggleSidebar() {
     final screenWidth = MediaQuery.of(context).size.width;
-    final isSmallScreen = screenWidth < 600;
-    
+    bool isSmallScreen = screenWidth < 600;
+
     if (isSmallScreen) {
       // For small screens, open drawer which overlays content
       scaffoldKey.currentState?.openDrawer();
@@ -70,21 +70,23 @@ class _LandingViewState extends State<LandingView> {
 
   @override
   void dispose() {
-    sideBarconfig.removeListener(refreshPage); // Fixed: was adding instead of removing
+    sideBarconfig.removeListener(
+      refreshPage,
+    ); // Fixed: was adding instead of removing
     super.dispose();
   }
 
- @override
+  @override
   Widget build(BuildContext context) {
     // Get screen size for responsiveness
     final screenWidth = MediaQuery.of(context).size.width;
     final isSmallScreen = screenWidth < 600;
-    
+
     // Automatically hide sidebar on small screens
     if (isSmallScreen && _isSidebarVisible && screenWidth < 500) {
       _isSidebarVisible = false;
     }
-    
+
     // Sidebar width based on screen size - changed from 0.7 to 0.75 (75%)
     final sidebarWidth = isSmallScreen ? screenWidth * 0.75 : 250.0;
 
@@ -103,26 +105,10 @@ class _LandingViewState extends State<LandingView> {
         centerTitle: false,
         titleSpacing: 0,
         title: Image.asset("assets/image/barbikan_logo.png", height: 35),
-        // title: SizedBox(
-        //   height: 40,
-        //   width: 250,
-        //   child: TextFormField(
-        //     decoration: InputDecoration(
-        //       prefixIcon: Icon(Icons.search, size: 18),
-        //       filled: true,
-        //       fillColor: Color(0xffEEEEEE),
-        //       border: OutlineInputBorder(
-        //         borderRadius: BorderRadius.circular(10),
-        //         borderSide: BorderSide.none,
-        //       ),
-        //       contentPadding: EdgeInsets.symmetric(horizontal: 15),
-        //       hintText: "Search ...",
-        //     ),
-        //   ),
-        // ),
+
         actions: [
           SizedBox(
-            width: isSmallScreen ? 150 : 250, // Adjust width for small screens
+            width: isSmallScreen ? 150 : 250,
             height: 40,
             child: DropdownButtonFormField(
               value: currentCompany,
@@ -147,11 +133,13 @@ class _LandingViewState extends State<LandingView> {
           const SizedBox(width: 10),
         ],
       ),
-      drawer: isSmallScreen ? 
-        Drawer(
-          width: screenWidth * 0.75, // Set drawer width to 75% of screen
-          child: SideBarView(),
-        ) : null,
+      drawer:
+          isSmallScreen
+              ? Drawer(
+                width: screenWidth * 0.75, // Set drawer width to 75% of screen
+                child: SideBarView(),
+              )
+              : null,
       body: Row(
         children: [
           // Conditionally show sidebar based on visibility state
@@ -176,7 +164,10 @@ class _LandingViewState extends State<LandingView> {
                     decoration: BoxDecoration(
                       color: Color(0xffEEEEEE),
                       borderRadius: BorderRadius.only(
-                        topLeft: _isSidebarVisible ? Radius.circular(10) : Radius.zero,
+                        topLeft:
+                            _isSidebarVisible
+                                ? Radius.circular(10)
+                                : Radius.zero,
                       ),
                     ),
                     child: pageList[sideBarconfig.currentIndex],

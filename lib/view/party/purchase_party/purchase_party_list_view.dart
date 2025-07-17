@@ -397,16 +397,6 @@ class _PurchasePartyListViewState extends State<PurchasePartyListView>
             builder: (context) => Scaffold(body: CreatePurchasePartyView()),
           ),
         );
-
-        // Option 2: If you're using a drawer approach
-        // Make sure scaffoldKey is defined in your class
-        // final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-        //
-        // Then update your state or provider
-        // setState(() {
-        //   currentView = CreatePurchasePartyView();
-        // });
-        // scaffoldKey.currentState!.openEndDrawer();
       },
       child: Container(
         padding: EdgeInsets.symmetric(

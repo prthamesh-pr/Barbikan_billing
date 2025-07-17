@@ -1,4 +1,4 @@
-import 'package:billing_web/view/config.dart';
+import 'package:barbikan/view/config.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 

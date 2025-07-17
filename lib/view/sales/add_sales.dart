@@ -87,11 +87,6 @@ class _AddSalesState extends State<AddSales> {
     if (_formKey.currentState!.validate()) {
       // Here you would save the sale to your database
       // For now, just print the data and navigate back
-      print('Customer: ${_customerController.text}');
-      print('Date: ${DateFormat('yyyy-MM-dd').format(_selectedDate)}');
-      print('Status: $_selectedStatus');
-      print('Total Amount: \$${_totalAmount.toStringAsFixed(2)}');
-
       // Display success message
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(

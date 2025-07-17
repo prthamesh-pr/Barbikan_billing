@@ -77,11 +77,9 @@ class _MenuViewState extends State<MenuView> {
             }
           },
           child: Container(
-            // margin: const EdgeInsets.symmetric(horizontal: 5),
             padding: const EdgeInsets.only(left: 10, right: 10),
             decoration: BoxDecoration(
               color: isSelected ? Theme.of(context).primaryColor : null,
-              // borderRadius: BorderRadius.circular(10),
             ),
             height: 55,
             width: double.infinity,
